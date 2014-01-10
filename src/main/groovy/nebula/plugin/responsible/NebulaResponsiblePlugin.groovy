@@ -1,5 +1,8 @@
 package nebula.plugin.responsible
 
+import nebula.plugin.publishing.NebulaJavadocJarPlugin
+import nebula.plugin.publishing.NebulaSourceJarPlugin
+import nebula.plugin.publishing.NebulaTestJarPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
@@ -18,13 +21,13 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
     void apply(Project project) {
         this.project = project
 
-        // TODO sources jar
-        // TODO javadoc jar
+        project.plugins.apply(NebulaJavadocJarPlugin)
+        project.plugins.apply(NebulaSourceJarPlugin)
+        project.plugins.apply(NebulaTestJarPlugin)
+
         // TODO Publish javadoc somehow
         project.tasks.withType(Javadoc) {
             failOnError = false
         }
-
-        // TODO test jar
     }
 }
