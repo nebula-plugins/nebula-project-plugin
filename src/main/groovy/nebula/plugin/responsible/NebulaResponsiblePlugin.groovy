@@ -22,6 +22,7 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
     void apply(Project project) {
         this.project = project
 
+        project.plugins.apply(FixJavaPlugin)
         project.plugins.apply(NebulaJavadocJarPlugin)
         project.plugins.apply(NebulaSourceJarPlugin)
         project.plugins.apply(NebulaTestJarPlugin)
