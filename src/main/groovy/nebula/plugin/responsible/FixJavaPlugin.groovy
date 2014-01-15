@@ -1,14 +1,10 @@
 package nebula.plugin.responsible
 
-import org.apache.commons.lang.reflect.FieldUtils
+import org.apache.commons.lang3.reflect.FieldUtils
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Configuration
 import org.gradle.api.plugins.BasePlugin
-import org.gradle.api.plugins.JavaBasePlugin
-import org.gradle.api.plugins.JavaPluginConvention
-import org.gradle.api.tasks.SourceSet
 
 /**
  * Restores status of project after Java plugin runs. The one caveat is that this plugin has to be run before the
