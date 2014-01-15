@@ -41,7 +41,7 @@ def pomConfig = {
     }
 }
 
-import nebula.plugin.publishing.NebulaBaseMavenPublishingPlugin
+import nebula.plugin.publishing.maven.NebulaBaseMavenPublishingPlugin
 plugins.withType(NebulaBaseMavenPublishingPlugin) {
     withMavenPublication {
         pom.withXml {
