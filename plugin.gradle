@@ -7,7 +7,7 @@ description 'Gradle plugin to setup a responsible Gradle project'
 apply plugin: 'nebula-plugin'
 
 dependencies {
-    compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.+'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.1'
 }
 
 def pomConfig = {
