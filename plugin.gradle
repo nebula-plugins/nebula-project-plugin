@@ -1,13 +1,14 @@
 buildscript {
     repositories { jcenter() }
-    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:1.9.2' }
+    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:1.9.10' }
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
 apply plugin: 'nebula-plugin'
+apply plugin: 'idea'
 
 dependencies {
-    compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.1'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.6'
 }
 
 def pomConfig = {
