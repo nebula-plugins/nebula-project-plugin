@@ -1,8 +1,13 @@
 package nebula.plugin.responsible
 
+import nebula.plugin.contacts.ContactsPlugin
+import nebula.plugin.dependencylock.DependencyLockPlugin
+import nebula.plugin.info.InfoPlugin
 import nebula.plugin.publishing.NebulaJavadocJarPlugin
+import nebula.plugin.publishing.NebulaPublishingPlugin
 import nebula.plugin.publishing.NebulaSourceJarPlugin
 import nebula.plugin.publishing.NebulaTestJarPlugin
+import nebula.plugin.publishing.sign.NebulaSignPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
@@ -11,7 +16,7 @@ import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.api.tasks.testing.Test
 
 /**
- * Provide a responsible environment for a Gradle plugin
+ * Provide a responsible environment for a Gradle plugin.
  */
 class NebulaResponsiblePlugin implements Plugin<Project> {
     private static Logger logger = Logging.getLogger(NebulaResponsiblePlugin);
@@ -23,9 +28,22 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         this.project = project
 
         project.plugins.apply(FixJavaPlugin)
+
+        // Publishing
+        project.plugins.apply(NebulaPublishingPlugin)
+        project.plugins.apply(NebulaSignPlugin)
         project.plugins.apply(NebulaJavadocJarPlugin)
         project.plugins.apply(NebulaSourceJarPlugin)
         project.plugins.apply(NebulaTestJarPlugin)
+
+        // Info
+        project.plugins.apply(InfoPlugin)
+
+        // Contacts
+        project.plugins.apply(ContactsPlugin)
+
+        // Dependency Locking
+        project.plugins.apply(DependencyLockPlugin)
 
         // TODO Publish javadoc somehow
         project.tasks.withType(Javadoc) {
