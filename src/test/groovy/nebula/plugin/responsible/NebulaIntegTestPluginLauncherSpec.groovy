@@ -11,8 +11,8 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
     String fakePackage = "netflix"
 
     def setup() {
-        writeIntegTest( fakePackage )
-        writeIntegTestResource( 'integTest.properties' )
+        writeTest( 'src/integTest/java', fakePackage )
+        writeResource( 'src/integTest/resources', 'integTest.properties' )
         buildFile << """
             apply plugin: 'java'
             ${applyPlugin(NebulaIntegTestPlugin)}
@@ -58,27 +58,5 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
 
         then:
         fileExists('build/reports/integTest/index.html')
-    }
-
-    // TODO move to nebula-test IntegrationSpec class
-    void writeIntegTest( String packageDotted ) {
-        def path = 'src/integTest/java/' + packageDotted.replaceAll('.', '/') + '/HelloWorldTest.java'
-        def javaFile = createFile(path)
-        javaFile << """package ${packageDotted};
-            import org.junit.Test;
-
-            public class HelloWorldTest {
-                @Test public void doesSomething() {
-                    assert true;
-                }
-            }
-        """.stripIndent()
-    }
-
-    // TODO move to nebula-test IntegrationSpec class
-    void writeIntegTestResource( String name ) {
-        def path = "src/integTest/resources/$name"
-        def resourceFile = createFile(path)
-        resourceFile << """firstProperty=foo.bar"""
     }
 }
