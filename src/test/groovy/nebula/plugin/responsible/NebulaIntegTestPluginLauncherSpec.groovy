@@ -11,8 +11,8 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
     String fakePackage = "netflix"
 
     def setup() {
-        writeTest( 'src/integTest/java', fakePackage )
-        writeResource( 'src/integTest/resources', 'integTest.properties' )
+        writeTest( 'src/integTest/java/', fakePackage, false )
+        writeResource( 'src/integTest/resources', 'integTest' )
         buildFile << """
             apply plugin: 'java'
             ${applyPlugin(NebulaIntegTestPlugin)}
