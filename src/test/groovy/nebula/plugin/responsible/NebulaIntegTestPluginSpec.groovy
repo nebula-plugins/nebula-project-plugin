@@ -1,17 +1,14 @@
 package nebula.plugin.responsible
 
-import nebula.test.ProjectSpec
+import nebula.test.PluginProjectSpec
 
 /**
  * Unit tests for the NebulaIntegTestPlugin class.
  */
-class NebulaIntegTestPluginSpec extends ProjectSpec {
+class NebulaIntegTestPluginSpec extends PluginProjectSpec {
 
-    def 'apply plugin does not throw exception'() {
-        when:
-        project.plugins.apply(NebulaIntegTestPlugin)
-
-        then:
-        noExceptionThrown()
+    @Override
+    String getPluginName() {
+        return 'nebula-integtest'
     }
 }
