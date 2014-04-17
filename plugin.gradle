@@ -1,37 +1,23 @@
 buildscript {
     repositories { jcenter() }
-    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:1.9.10' }
+    dependencies { classpath "com.netflix.nebula:nebula-plugin-plugin:${gradle.gradleVersion}.+" }
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
 apply plugin: 'nebula-plugin'
-apply plugin: 'idea'
 
 dependencies {
     compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.6'
+    compile 'com.netflix.nebula:nebula-test:1.9.8'
 }
 
-def pomConfig = {
-    inceptionYear '2014'
-
-    developers {
-        developer {
-            id 'quidryan'
-            name 'Justin Ryan'
-            email 'justin@halfempty.org'
-            roles{
-                role 'Developer'
-            }
-            timezone '-8'
-        }
+contacts {
+    'justin@halfempty.org' {
+        moniker 'Justin Ryan'
+        github 'quidryan'
     }
-}
-
-import nebula.plugin.publishing.maven.NebulaBaseMavenPublishingPlugin
-plugins.withType(NebulaBaseMavenPublishingPlugin) {
-    withMavenPublication {
-        pom.withXml {
-            asNode().children().last() + pomConfig
-        }
+    'rob.spieldenner@gmail.com' {
+        moniker 'Rob Spieldenner'
+        github 'rspieldenner'
     }
 }
