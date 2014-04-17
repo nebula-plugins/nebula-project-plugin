@@ -1,23 +1,31 @@
 buildscript {
     repositories { jcenter() }
     dependencies { classpath "com.netflix.nebula:nebula-plugin-plugin:${gradle.gradleVersion}.+" }
+
+    // use ourselves if a newer version is available
+    dependencies { classpath 'com.netflix.nebula:nebula-project-plugin:1.9.+' }
+
+    // temporary
+    dependencies { classpath 'com.netflix.nebula:gradle-contacts-plugin:1.9.+' }
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
 apply plugin: 'nebula-plugin'
-
-dependencies {
-    compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.6'
-    compile 'com.netflix.nebula:nebula-test:1.9.8'
-}
+apply plugin: 'nebula-project' // redundant given that nebula-plugin will apply us
+apply plugin: 'contacts' // temporary
 
 contacts {
     'justin@halfempty.org' {
         moniker 'Justin Ryan'
         github 'quidryan'
     }
-    'rob.spieldenner@gmail.com' {
-        moniker 'Rob Spieldenner'
-        github 'rspieldenner'
-    }
 }
+
+dependencies {
+    compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.6'
+    compile 'com.netflix.nebula:gradle-contacts-plugin:1.9.0'
+    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:1.9.4'
+    compile 'com.netflix.nebula:gradle-info-plugin:1.9.3'
+    compile 'com.netflix.nebula:nebula-test:1.9.8-SNAPSHOT'
+}
+
