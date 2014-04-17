@@ -8,7 +8,7 @@ import org.gradle.api.logging.LogLevel
  */
 class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
 
-    String fakePackage = "netflix"
+    String fakePackage = "nebula"
 
     def setup() {
         writeTest( 'src/integTest/java/', fakePackage, false )
