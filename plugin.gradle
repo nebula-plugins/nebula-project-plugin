@@ -26,5 +26,6 @@ dependencies {
     compile 'com.netflix.nebula:gradle-contacts-plugin:1.9.0'
     compile 'com.netflix.nebula:gradle-dependency-lock-plugin:1.9.4'
     compile 'com.netflix.nebula:gradle-info-plugin:1.9.3'
+    compile 'com.netflix.nebula:nebula-test:1.9.8'
 }
 
