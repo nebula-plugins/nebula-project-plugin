@@ -1,9 +1,9 @@
 buildscript {
     repositories { jcenter() }
-    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:1.9.+' }
+    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:1.11.+' }
 
     // use ourselves if a newer version is available
-    dependencies { classpath 'com.netflix.nebula:nebula-project-plugin:1.9.+' }
+    dependencies { classpath 'com.netflix.nebula:nebula-project-plugin:1.11.+' }
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
@@ -26,9 +26,9 @@ contacts {
 }
 
 dependencies {
-    compile 'com.netflix.nebula:nebula-publishing-plugin:1.9.+'
-    compile 'com.netflix.nebula:gradle-contacts-plugin:1.9.+'
-    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:1.9.+'
-    compile 'com.netflix.nebula:gradle-info-plugin:1.9.+'
-    testCompile 'com.netflix.nebula:nebula-test:1.9.+'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:1.11.+'
+    compile 'com.netflix.nebula:gradle-contacts-plugin:1.11.+'
+    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:1.11.+'
+    compile 'com.netflix.nebula:gradle-info-plugin:1.11.+'
+    testCompile 'com.netflix.nebula:nebula-test:1.11.+'
 }
