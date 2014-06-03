@@ -50,14 +50,14 @@ plugins.withType(JavaPlugin) {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'com.netflix.nebula:nebula-publishing-plugin:1.11.0-SNAPSHOT'
-    compile 'com.netflix.nebula:nebula-core:1.11.0-SNAPSHOT'
-    compile 'com.netflix.nebula:gradle-contacts-plugin:1.11.0-SNAPSHOT'
-    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:1.11.0-SNAPSHOT'
-    compile 'com.netflix.nebula:gradle-info-plugin:1.11.0-SNAPSHOT'
-    testCompile 'com.netflix.nebula:nebula-test:1.11.0-SNAPSHOT'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:1.12.0-SNAPSHOT'
+    compile 'com.netflix.nebula:nebula-core:1.12.0-SNAPSHOT'
+    compile 'com.netflix.nebula:gradle-contacts-plugin:1.12.0-SNAPSHOT'
+    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:1.12.0-SNAPSHOT'
+    compile 'com.netflix.nebula:gradle-info-plugin:1.12.0-SNAPSHOT'
+    testCompile 'com.netflix.nebula:nebula-test:1.12.0-SNAPSHOT'
 }
 
 task createWrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '1.12'
 }
