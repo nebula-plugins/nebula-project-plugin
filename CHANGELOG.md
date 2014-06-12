@@ -1,3 +1,8 @@
+1.12.1 / 2014-06-11
+===================
+
+* nebula-plugin-plugin to 1.12.1 for fully qualified plugin names
+
 1.9.6 / 2014-04-24
 ==================
 
