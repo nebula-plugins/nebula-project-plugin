@@ -58,6 +58,25 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         project.sourceSets.size() == 4
     }
 
+    def 'can run without sourcesets'() {
+        when:
+        project.apply plugin: NebulaFacetPlugin
+        project.apply plugin: 'java-base'
+        project.facets {
+            examples
+            samples
+        }
+
+        then:
+        project.sourceSets.size() == 0
+
+        when:
+        project.apply plugin: 'java'
+
+        then:
+        project.sourceSets.size() == 4
+    }
+
     def 'configure facets'() {
         when:
         project.apply plugin: 'java'

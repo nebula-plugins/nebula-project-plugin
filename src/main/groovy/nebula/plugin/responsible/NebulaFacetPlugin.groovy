@@ -43,26 +43,27 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
                 JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
                 SourceSetContainer sourceSets = javaConvention.sourceSets
-                SourceSet parentSourceSet = sourceSets.getByName(facet.parentSourceSet)
+                sourceSets.matching { it.name == facet.parentSourceSet } .all { SourceSet parentSourceSet ->
 
-                // Since we're using NamedContainerProperOrder, we're configured already.
-                SourceSet sourceSet = createSourceSet(parentSourceSet, facet)
+                    // Since we're using NamedContainerProperOrder, we're configured already.
+                    SourceSet sourceSet = createSourceSet(parentSourceSet, facet)
 
-                Configuration parentCompile = project.configurations.getByName(parentSourceSet.compileConfigurationName)
-                project.configurations.getByName(sourceSet.compileConfigurationName).extendsFrom(parentCompile)
+                    Configuration parentCompile = project.configurations.getByName(parentSourceSet.compileConfigurationName)
+                    project.configurations.getByName(sourceSet.compileConfigurationName).extendsFrom(parentCompile)
 
-                Configuration parentRuntime = project.configurations.getByName(parentSourceSet.runtimeConfigurationName)
-                project.configurations.getByName(sourceSet.runtimeConfigurationName).extendsFrom(parentRuntime)
+                    Configuration parentRuntime = project.configurations.getByName(parentSourceSet.runtimeConfigurationName)
+                    project.configurations.getByName(sourceSet.runtimeConfigurationName).extendsFrom(parentRuntime)
 
-                // Make sure at the classes get built as part of build
-                project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
+                    // Make sure at the classes get built as part of build
+                    project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
 
-                if (facet instanceof TestFacetDefinition) {
+                    if (facet instanceof TestFacetDefinition) {
 
-                    Test testTask = createTestTask(facet.testTaskName, sourceSet)
+                        Test testTask = createTestTask(facet.testTaskName, sourceSet)
 
-                    testTask.mustRunAfter(project.tasks.getByName('test'))
-                    project.tasks.getByName('check').dependsOn(testTask)
+                        testTask.mustRunAfter(project.tasks.getByName('test'))
+                        project.tasks.getByName('check').dependsOn(testTask)
+                    }
                 }
             }
         }
