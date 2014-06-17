@@ -11,7 +11,6 @@ import org.gradle.api.Named
 @Canonical
 class FacetDefinition implements Named {
     // TODO Use convention mapping to provide good defaults
-    // TODO Design another plugin that makes test facets, instead of a boolean
     public FacetDefinition(String name) {
         this.name = name
     }

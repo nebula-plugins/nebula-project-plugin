@@ -14,8 +14,8 @@ class NebulaIntegTestPlugin implements Plugin<Project> {
     @Override
     void apply( Project project ) {
 
-        def sourceSetPlugin = project.plugins.apply(NebulaFacetPlugin)
-        sourceSetPlugin.extension.create('integTest') {
+        def facetPlugin = project.plugins.apply(NebulaFacetPlugin)
+        facetPlugin.extension.create('integTest') {
             testTaskName = 'integrationTest'
             parentSourceSet = 'test'
         }
