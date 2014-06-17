@@ -34,7 +34,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
             }
         })
 
-        project.extensions.add('facet', extension)
+        project.extensions.add('facets', extension)
 
         // TODO Add remove call, to protect against removals
         extension.all { FacetDefinition facet ->
@@ -53,6 +53,9 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
                 Configuration parentRuntime = project.configurations.getByName(parentSourceSet.runtimeConfigurationName)
                 project.configurations.getByName(sourceSet.runtimeConfigurationName).extendsFrom(parentRuntime)
+
+                // Make sure at the classes get built as part of build
+                project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
 
                 if (facet instanceof TestFacetDefinition) {
 

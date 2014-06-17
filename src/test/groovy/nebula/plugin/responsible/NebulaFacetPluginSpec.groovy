@@ -11,7 +11,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
     def 'do nothing without Java plugin'() {
         when:
         project.apply plugin: NebulaFacetPlugin
-        project.facet {
+        project.facets {
             integTest
         }
 
@@ -23,7 +23,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         when:
         project.apply plugin: 'java'
         project.apply plugin: NebulaFacetPlugin
-        project.facet {
+        project.facets {
             integTest
         }
 
@@ -49,7 +49,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         when:
         project.apply plugin: 'java'
         project.apply plugin: NebulaFacetPlugin
-        project.facet {
+        project.facets {
             examples
             samples
         }
@@ -58,11 +58,11 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         project.sourceSets.size() == 4
     }
 
-    def 'configure facet'() {
+    def 'configure facets'() {
         when:
         project.apply plugin: 'java'
         project.apply plugin: NebulaFacetPlugin
-        project.facet {
+        project.facets {
             examples {
                 parentSourceSet = 'test'
             }
@@ -81,7 +81,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         when:
         project.apply plugin: 'java'
         project.apply plugin: NebulaFacetPlugin
-        project.facet {
+        project.facets {
             performanceTest
         }
 
@@ -92,7 +92,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         }
 
         when:
-        project.facet {
+        project.facets {
             functionalTest {
                 testTaskName = 'functional'
             }
