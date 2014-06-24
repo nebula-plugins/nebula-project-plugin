@@ -1,9 +1,6 @@
 buildscript {
     repositories { jcenter() }
-    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:1.12.1' }
-
-    // use ourselves if a newer version is available
-    dependencies { classpath 'com.netflix.nebula:nebula-project-plugin:1.12.+' }
+    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:1.12.+' }
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
