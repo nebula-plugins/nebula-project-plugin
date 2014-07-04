@@ -2,9 +2,6 @@ package nebula.plugin.responsible
 
 import nebula.test.IntegrationSpec
 
-/**
- * @author J. Michael McGarr
- */
 class NebulaMetadataPluginLauncherSpec extends IntegrationSpec {
 
     String mavenLocal = "${System.env['HOME']}/.m2/repository"
