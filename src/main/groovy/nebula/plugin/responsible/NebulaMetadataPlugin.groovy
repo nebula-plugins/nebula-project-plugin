@@ -2,6 +2,7 @@ package nebula.plugin.responsible
 
 import nebula.plugin.info.InfoBrokerPlugin
 import nebula.plugin.publishing.maven.NebulaBaseMavenPublishingPlugin
+import nebula.plugin.publishing.maven.NebulaMavenPublishingPlugin
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -61,15 +62,10 @@ class NebulaMetadataPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
 
-        project.plugins.withType(NebulaBaseMavenPublishingPlugin) { NebulaBaseMavenPublishingPlugin mavenPlugin ->
-            mavenPlugin.withMavenPublication { MavenPublication mavenPublication ->
-                mavenPublication.pom.withXml { XmlProvider xmlProvider ->
-                    InfoBrokerPlugin infoPlugin = project.plugins.findPlugin(InfoBrokerPlugin)
-                    if (infoPlugin) {
-                        if (!project.state.executed) {
-                            throw new GradleException('Trying to generate manifest too early')
-                        }
-
+        project.plugins.withType(InfoBrokerPlugin) { InfoBrokerPlugin infoPlugin ->
+            project.plugins.withType(NebulaBaseMavenPublishingPlugin) { NebulaBaseMavenPublishingPlugin mavenPlugin ->
+                mavenPlugin.withMavenPublication { MavenPublication mavenPublication ->
+                    mavenPublication.pom.withXml { XmlProvider xmlProvider ->
                         Map<String, String> metadata = infoPlugin.buildManifest()
 
                         Node root = xmlProvider.asNode()
@@ -77,8 +73,6 @@ class NebulaMetadataPlugin implements Plugin<Project> {
                         if (propertyNode == null) {
                             propertyNode = root.appendNode('properties')
                         }
-                        println propertyNode
-
                         metadata.each { key, value ->
                             propertyNode.appendNode("nebula.$key", value)
                         }
