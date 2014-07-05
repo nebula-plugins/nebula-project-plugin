@@ -28,12 +28,9 @@ class NebulaMetadataPluginLauncherSpec extends IntegrationSpec {
         '''.stripIndent()
 
         when: 'the artifacts are built and published'
-        def results = runTasksSuccessfully('publishToMavenLocal')
+        runTasksSuccessfully('publishToMavenLocal')
 
-        then: 'the build was successful'
-        results.failure == null
-
-        and: 'publishes a pom file'
+        then: 'publishes a pom file'
         def pomFile = new File("$mavenLocal/nebula/hello/world/1.0/world-1.0.pom")
         pomFile.exists()
 

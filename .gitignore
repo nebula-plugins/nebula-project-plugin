@@ -4,4 +4,3 @@ build/
 .idea/
 *.iml
 *.ipr
-gradle/

@@ -63,20 +63,33 @@ class NebulaMetadataPlugin implements Plugin<Project> {
     void apply(Project project) {
 
         project.plugins.withType(InfoBrokerPlugin) { InfoBrokerPlugin infoPlugin ->
-            project.plugins.withType(NebulaBaseMavenPublishingPlugin) { NebulaBaseMavenPublishingPlugin mavenPlugin ->
-                mavenPlugin.withMavenPublication { MavenPublication mavenPublication ->
-                    mavenPublication.pom.withXml { XmlProvider xmlProvider ->
-                        Map<String, String> metadata = infoPlugin.buildManifest()
 
-                        Node root = xmlProvider.asNode()
-                        Node propertyNode = root.children().find { it.name == 'properties' }
-                        if (propertyNode == null) {
-                            propertyNode = root.appendNode('properties')
-                        }
-                        metadata.each { key, value ->
-                            propertyNode.appendNode("nebula.$key", value)
-                        }
-                    }
+            project.plugins.withType(NebulaBaseMavenPublishingPlugin) { NebulaBaseMavenPublishingPlugin mavenPlugin ->
+                addMetadataToMavenPom(infoPlugin, mavenPlugin)
+            }
+
+            // add Ivy metadata updating
+        }
+    }
+
+    /**
+     * Adds the gradle-info-plugin's metadata to the Maven pom file.
+     *
+     * @param infoPlugin instance used to extract the metadata
+     * @param mavenPlugin instance used to grab the pom file to update
+     */
+    private void addMetadataToMavenPom( InfoBrokerPlugin infoPlugin, NebulaBaseMavenPublishingPlugin mavenPlugin ) {
+        mavenPlugin.withMavenPublication { MavenPublication mavenPublication ->
+            mavenPublication.pom.withXml { XmlProvider xmlProvider ->
+                Map<String, String> metadata = infoPlugin.buildManifest()
+
+                Node root = xmlProvider.asNode()
+                Node propertyNode = root.children().find { it.name == 'properties' }
+                if (propertyNode == null) {
+                    propertyNode = root.appendNode('properties')
+                }
+                metadata.each { key, value ->
+                    propertyNode.appendNode("nebula.$key", value)
                 }
             }
         }
