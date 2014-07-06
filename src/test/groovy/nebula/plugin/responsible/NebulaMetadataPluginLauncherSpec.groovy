@@ -36,7 +36,7 @@ class NebulaMetadataPluginLauncherSpec extends IntegrationSpec {
 
         and: 'the published pom contains a collected value'
         def pom = new XmlSlurper().parseText(pomFile.text)
-        pom.properties.'nebula.Implementation-Version' == '1.0'
-        pom.properties.'nebula.Implementation-Title' == 'nebula.hello#world;1.0'
+        pom.properties.'nebula_Implementation_Version' == '1.0'
+        pom.properties.'nebula_Implementation_Title' == 'nebula.hello#world;1.0'
     }
 }

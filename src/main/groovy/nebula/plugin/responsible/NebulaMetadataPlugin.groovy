@@ -2,8 +2,6 @@ package nebula.plugin.responsible
 
 import nebula.plugin.info.InfoBrokerPlugin
 import nebula.plugin.publishing.maven.NebulaBaseMavenPublishingPlugin
-import nebula.plugin.publishing.maven.NebulaMavenPublishingPlugin
-import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.XmlProvider
@@ -78,7 +76,7 @@ class NebulaMetadataPlugin implements Plugin<Project> {
      * @param infoPlugin instance used to extract the metadata
      * @param mavenPlugin instance used to grab the pom file to update
      */
-    private void addMetadataToMavenPom( InfoBrokerPlugin infoPlugin, NebulaBaseMavenPublishingPlugin mavenPlugin ) {
+    void addMetadataToMavenPom(InfoBrokerPlugin infoPlugin, NebulaBaseMavenPublishingPlugin mavenPlugin) {
         mavenPlugin.withMavenPublication { MavenPublication mavenPublication ->
             mavenPublication.pom.withXml { XmlProvider xmlProvider ->
                 Map<String, String> metadata = infoPlugin.buildManifest()
@@ -89,9 +87,13 @@ class NebulaMetadataPlugin implements Plugin<Project> {
                     propertyNode = root.appendNode('properties')
                 }
                 metadata.each { key, value ->
-                    propertyNode.appendNode("nebula.$key", value)
+                    propertyNode.appendNode(scrubElementName("nebula_$key"), value)
                 }
             }
         }
+    }
+
+    String scrubElementName(String name) {
+        name.replaceAll(/\.|-/, '_').replaceAll(/\s/, '').trim()
     }
 }
