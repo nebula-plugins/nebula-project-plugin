@@ -2,12 +2,12 @@ package nebula.plugin.responsible
 
 import spock.lang.Specification
 
-class NebulaMetadataPluginSpec extends Specification {
+class NebulaPublishManifestPluginSpec extends Specification {
 
-    NebulaMetadataPlugin plugin
+    NebulaPublishManifestPlugin plugin
 
     def setup() {
-        this.plugin = new NebulaMetadataPlugin()
+        this.plugin = new NebulaPublishManifestPlugin()
     }
 
     void "passes valid name"() {

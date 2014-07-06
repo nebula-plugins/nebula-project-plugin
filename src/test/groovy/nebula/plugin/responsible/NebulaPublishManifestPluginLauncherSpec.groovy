@@ -2,7 +2,7 @@ package nebula.plugin.responsible
 
 import nebula.test.IntegrationSpec
 
-class NebulaMetadataPluginLauncherSpec extends IntegrationSpec {
+class NebulaPublishManifestPluginLauncherSpec extends IntegrationSpec {
 
     String mavenLocal = "${System.env['HOME']}/.m2/repository"
 
@@ -15,7 +15,7 @@ class NebulaMetadataPluginLauncherSpec extends IntegrationSpec {
             apply plugin: 'java'
             apply plugin: 'info'
             apply plugin: 'nebula-publishing'
-            apply plugin: 'nebula-metadata'
+            apply plugin: 'nebula-publish-manifest'
 
             group = 'nebula.hello'
             version = '1.0'

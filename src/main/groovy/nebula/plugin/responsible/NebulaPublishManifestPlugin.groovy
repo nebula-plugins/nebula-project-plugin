@@ -53,7 +53,7 @@ import org.gradle.api.publish.maven.MavenPublication
  *
  * @author J. Michael McGarr
  */
-class NebulaMetadataPlugin implements Plugin<Project> {
+class NebulaPublishManifestPlugin implements Plugin<Project> {
 
     protected Project project
 
