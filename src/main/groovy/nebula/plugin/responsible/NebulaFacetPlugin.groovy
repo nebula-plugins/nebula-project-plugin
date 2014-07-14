@@ -1,7 +1,7 @@
 package nebula.plugin.responsible
 
 import nebula.core.NamedContainerProperOrder
-import nebula.plugin.responsible.ide.IdePluginConfigurer
+import nebula.plugin.responsible.ide.IDEPluginConfigurer
 import nebula.plugin.responsible.ide.IdeaPluginConfigurer
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectFactory
@@ -67,7 +67,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
                         project.tasks.getByName('check').dependsOn(testTask)
                     }
 
-                    IdePluginConfigurer idePluginConfigurer = new IdeaPluginConfigurer(project)
+                    IDEPluginConfigurer idePluginConfigurer = new IdeaPluginConfigurer(project)
                     idePluginConfigurer.configure(sourceSet, facet)
                 }
             }

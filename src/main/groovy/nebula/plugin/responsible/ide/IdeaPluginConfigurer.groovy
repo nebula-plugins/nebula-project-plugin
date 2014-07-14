@@ -9,7 +9,7 @@ import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.gradle.plugins.ide.idea.model.IdeaModule
 
-class IdeaPluginConfigurer implements IdePluginConfigurer {
+class IdeaPluginConfigurer implements IDEPluginConfigurer {
     private final Project project
 
     IdeaPluginConfigurer(Project project) {

@@ -3,7 +3,7 @@ package nebula.plugin.responsible.ide
 import nebula.plugin.responsible.FacetDefinition
 import org.gradle.api.tasks.SourceSet
 
-interface IdePluginConfigurer {
+interface IDEPluginConfigurer {
     /**
      * Configures IDE plugin.
      *
