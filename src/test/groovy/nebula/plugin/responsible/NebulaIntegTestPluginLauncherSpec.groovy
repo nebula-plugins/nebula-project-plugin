@@ -59,4 +59,33 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
         then:
         fileExists('build/reports/integTest/index.html')
     }
+
+    def "Can configures Idea project"() {
+        when:
+        buildFile << """
+apply plugin: 'idea'
+
+dependencies {
+    integTestCompile 'log4j:log4j:1.2.17'
+    integTestRuntime 'mysql:mysql-connector-java:5.1.27'
+}
+"""
+
+        writeHelloWorld('nebula.plugin.plugin')
+        writeTest("src/$NebulaIntegTestPlugin.FACET_NAME/java/", 'nebula.plugin.plugin', false)
+        runTasksSuccessfully('idea')
+
+        then:
+        File ideaModuleFile = new File(projectDir, "${moduleName}.iml")
+        ideaModuleFile.exists()
+        def moduleXml = new XmlSlurper().parseText(ideaModuleFile.text)
+        def testSourceFolders = moduleXml.component.content.sourceFolder.findAll { it.@isTestSource.text() == 'true' }
+        def testSourceFolder = testSourceFolders.find { it.@url.text() == "file://\$MODULE_DIR\$/src/$NebulaIntegTestPlugin.FACET_NAME/java" }
+        testSourceFolder
+        def orderEntries = moduleXml.component.orderEntry.findAll { it.@type.text() == 'module-library' && it.@scope.text() == 'TEST' }
+        def junitLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('log4j-1.2.17.jar') }
+        junitLibrary
+        def mysqlLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('mysql-connector-java-5.1.27.jar') }
+        mysqlLibrary
+    }
 }

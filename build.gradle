@@ -6,6 +6,7 @@ buildscript {
 description 'Gradle plugin to setup a responsible Gradle project'
 apply plugin: 'nebula-plugin'
 apply plugin: 'nebula-project' // redundant given that nebula-plugin will apply us
+apply plugin: 'idea'
 
 contacts {
     'justin@halfempty.org' {
