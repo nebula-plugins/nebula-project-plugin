@@ -11,4 +11,23 @@ class NebulaIntegTestPluginSpec extends PluginProjectSpec {
     String getPluginName() {
         return 'nebula-integtest'
     }
+
+    def 'after applying java plugin'() {
+        when:
+        project.plugins.apply 'java'
+        project.plugins.apply pluginName
+
+        then:
+        noExceptionThrown()
+    }
+
+    def 'before applying java plugin'() {
+        when:
+        
+        project.plugins.apply pluginName
+        project.plugins.apply 'java'
+
+        then:
+        noExceptionThrown()
+    }
 }
