@@ -11,12 +11,14 @@ import org.gradle.api.plugins.JavaPlugin
  * located in 'src/integTest/java'.
  */
 class NebulaIntegTestPlugin implements Plugin<Project> {
+    static final String FACET_NAME = 'integTest'
 
     @Override
     void apply( Project project ) {
         def facetPlugin = project.plugins.apply(NebulaFacetPlugin)
+
         project.plugins.withType(JavaPlugin) {
-            facetPlugin.extension.create('integTest') {
+            facetPlugin.extension.create(FACET_NAME) {
                 testTaskName = 'integrationTest'
                 parentSourceSet = 'test'
             }
