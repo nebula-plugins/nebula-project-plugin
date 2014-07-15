@@ -24,7 +24,7 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
     def "Configures Idea project files for a custom test facet"() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
-        mavenRepoFixture.generateMavenRepoDependencies(['junit:junit:4.8.2', 'mysql:mysql-connector-java:5.1.27'])
+        mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
 
         buildFile << """
 apply plugin: 'java'
@@ -40,8 +40,8 @@ repositories {
 }
 
 dependencies {
-    functionalTestCompile 'junit:junit:4.8.2'
-    functionalTestRuntime 'mysql:mysql-connector-java:5.1.27'
+    functionalTestCompile 'foo:bar:2.4'
+    functionalTestRuntime 'custom:baz:5.1.27'
 }
 """
 
@@ -57,16 +57,14 @@ dependencies {
         def testSourceFolder = testSourceFolders.find { it.@url.text() == "file://\$MODULE_DIR\$/src/functionalTest/java" }
         testSourceFolder
         def orderEntries = moduleXml.component.orderEntry.findAll { it.@type.text() == 'module-library' && it.@scope.text() == 'TEST' }
-        def junitLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('junit-4.8.2.jar') }
-        junitLibrary
-        def mysqlLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('mysql-connector-java-5.1.27.jar') }
-        mysqlLibrary
+        orderEntries.find { it.library.CLASSES.root.@url.text().contains('bar-2.4.jar') }
+        orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
     }
 
     def "Configures Idea project files for a custom facet"() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
-        mavenRepoFixture.generateMavenRepoDependencies(['commons-io:commons-io:2.4', 'mysql:mysql-connector-java:5.1.27'])
+        mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
 
         buildFile << """
 apply plugin: 'java'
@@ -82,8 +80,8 @@ repositories {
 }
 
 dependencies {
-    myCustomCompile 'commons-io:commons-io:2.4'
-    myCustomRuntime 'mysql:mysql-connector-java:5.1.27'
+    myCustomCompile 'foo:bar:2.4'
+    myCustomRuntime 'custom:baz:5.1.27'
 }
 """
 
@@ -99,9 +97,7 @@ dependencies {
         def sourceFolder = sourceFolders.find { it.@url.text() == "file://\$MODULE_DIR\$/src/myCustom/java" }
         sourceFolder
         def orderEntries = moduleXml.component.orderEntry.findAll { it.@type.text() == 'module-library' && it.@exported.text() == '' }
-        def commonsIoLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('commons-io-2.4.jar') }
-        commonsIoLibrary
-        def mysqlLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('mysql-connector-java-5.1.27.jar') }
-        mysqlLibrary
+        orderEntries.find { it.library.CLASSES.root.@url.text().contains('bar-2.4.jar') }
+        orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
     }
 }

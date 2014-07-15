@@ -62,7 +62,7 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
     def "Can configures Idea project"() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
-        mavenRepoFixture.generateMavenRepoDependencies(['log4j:log4j:1.2.17', 'mysql:mysql-connector-java:5.1.27'])
+        mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
 
         buildFile << """
 apply plugin: 'idea'
@@ -72,8 +72,8 @@ repositories {
 }
 
 dependencies {
-    integTestCompile 'log4j:log4j:1.2.17'
-    integTestRuntime 'mysql:mysql-connector-java:5.1.27'
+    integTestCompile 'foo:bar:2.4'
+    integTestRuntime 'custom:baz:5.1.27'
 }
 """
 
@@ -89,9 +89,7 @@ dependencies {
         def testSourceFolder = testSourceFolders.find { it.@url.text() == "file://\$MODULE_DIR\$/src/$NebulaIntegTestPlugin.FACET_NAME/java" }
         testSourceFolder
         def orderEntries = moduleXml.component.orderEntry.findAll { it.@type.text() == 'module-library' && it.@scope.text() == 'TEST' }
-        def junitLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('log4j-1.2.17.jar') }
-        junitLibrary
-        def mysqlLibrary = orderEntries.find { it.library.CLASSES.root.@url.text().contains('mysql-connector-java-5.1.27.jar') }
-        mysqlLibrary
+        orderEntries.find { it.library.CLASSES.root.@url.text().contains('bar-2.4.jar') }
+        orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
     }
 }
