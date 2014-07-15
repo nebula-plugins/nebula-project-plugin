@@ -23,6 +23,9 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
 
     def "Configures Idea project files for a custom test facet"() {
         when:
+        MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
+        mavenRepoFixture.generateMavenRepoDependencies(['junit:junit:4.8.2', 'mysql:mysql-connector-java:5.1.27'])
+
         buildFile << """
 apply plugin: 'java'
 ${applyPlugin(NebulaFacetPlugin)}
@@ -33,7 +36,7 @@ facets {
 }
 
 repositories {
-    mavenCentral()
+    maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
 }
 
 dependencies {
@@ -62,6 +65,9 @@ dependencies {
 
     def "Configures Idea project files for a custom facet"() {
         when:
+        MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
+        mavenRepoFixture.generateMavenRepoDependencies(['commons-io:commons-io:2.4', 'mysql:mysql-connector-java:5.1.27'])
+
         buildFile << """
 apply plugin: 'java'
 ${applyPlugin(NebulaFacetPlugin)}
@@ -72,7 +78,7 @@ facets {
 }
 
 repositories {
-    mavenCentral()
+    maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
 }
 
 dependencies {

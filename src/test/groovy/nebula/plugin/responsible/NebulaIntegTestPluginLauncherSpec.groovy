@@ -1,7 +1,6 @@
 package nebula.plugin.responsible
 
 import nebula.test.IntegrationSpec
-import org.gradle.api.logging.LogLevel
 
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class
@@ -62,8 +61,15 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
 
     def "Can configures Idea project"() {
         when:
+        MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
+        mavenRepoFixture.generateMavenRepoDependencies(['log4j:log4j:1.2.17', 'mysql:mysql-connector-java:5.1.27'])
+
         buildFile << """
 apply plugin: 'idea'
+
+repositories {
+    maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+}
 
 dependencies {
     integTestCompile 'log4j:log4j:1.2.17'
