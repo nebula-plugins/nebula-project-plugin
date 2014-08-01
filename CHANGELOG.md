@@ -1,3 +1,33 @@
+1.12.7 / 2014-07-xx
+===================
+
+* Fix ordering issue between java and nebula-integtest plugins
+
+1.12.6 / 2014-06-24
+===================
+
+* update publishing plugin
+
+1.12.5 / 2014-06-24
+===================
+
+* update publishing plugin
+
+1.12.4 / 2014-06-23
+===================
+
+* update publishing plugin
+
+1.12.3 / 2014-06-18
+===================
+
+* update dependencies
+
+1.12.2 / 2014-06-17
+===================
+
+* update publishing plugin
+
 1.12.1 / 2014-06-11
 ===================
 

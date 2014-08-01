@@ -2,6 +2,7 @@ package nebula.plugin.responsible
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
 
 /**
  * Applies the Nebula integration test convention to the project.  This
@@ -10,15 +11,17 @@ import org.gradle.api.Project
  * located in 'src/integTest/java'.
  */
 class NebulaIntegTestPlugin implements Plugin<Project> {
+    static final String FACET_NAME = 'integTest'
 
     @Override
     void apply( Project project ) {
-
         def facetPlugin = project.plugins.apply(NebulaFacetPlugin)
-        facetPlugin.extension.create('integTest') {
-            testTaskName = 'integrationTest'
-            parentSourceSet = 'test'
+
+        project.plugins.withType(JavaPlugin) {
+            facetPlugin.extension.create(FACET_NAME) {
+                testTaskName = 'integrationTest'
+                parentSourceSet = 'test'
+            }
         }
     }
-
 }
