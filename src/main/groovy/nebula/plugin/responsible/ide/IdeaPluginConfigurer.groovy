@@ -49,8 +49,7 @@ class IdeaPluginConfigurer implements IDEPluginConfigurer {
                 module.testSourceDirs += srcDir
             }
 
-            module.scopes.TEST.plus += getConfiguration(testSourceSet.compileConfigurationName)
-            module.scopes.TEST.plus += getConfiguration(testSourceSet.runtimeConfigurationName)
+            module.scopes.TEST.plus += [getConfiguration(testSourceSet.compileConfigurationName), getConfiguration(testSourceSet.runtimeConfigurationName)]
         }
     }
 
@@ -66,8 +65,7 @@ class IdeaPluginConfigurer implements IDEPluginConfigurer {
                 module.sourceDirs += srcDir
             }
 
-            module.scopes.COMPILE.plus += getConfiguration(sourceSet.compileConfigurationName)
-            module.scopes.COMPILE.plus += getConfiguration(sourceSet.runtimeConfigurationName)
+            module.scopes.COMPILE.plus += [getConfiguration(sourceSet.compileConfigurationName), getConfiguration(sourceSet.runtimeConfigurationName)]
         }
     }
 
