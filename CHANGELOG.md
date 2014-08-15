@@ -1,7 +1,14 @@
-1.12.7 / 2014-07-xx
+1.12.8 / 2014-08-15
 ===================
 
 * Fix ordering issue between java and nebula-integtest plugins
+* Better configuration of IntelliJ IDEA
+* No longer auto apply nebula-test-jar to create a jar contains tests classes
+
+1.12.7 / 2014-06-30
+===================
+
+* Update contacts/info plugins
 
 1.12.6 / 2014-06-24
 ===================
