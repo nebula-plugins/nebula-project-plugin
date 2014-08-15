@@ -34,7 +34,6 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         project.plugins.apply(NebulaSignPlugin)
         project.plugins.apply(NebulaJavadocJarPlugin)
         project.plugins.apply(NebulaSourceJarPlugin)
-        project.plugins.apply(NebulaTestJarPlugin)
 
         // Info
         project.plugins.apply(InfoPlugin)
