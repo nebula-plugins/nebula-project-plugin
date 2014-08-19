@@ -10,6 +10,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.internal.project.AbstractProject
 import org.gradle.api.plugins.JavaBasePlugin
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
@@ -67,8 +68,12 @@ class NebulaFacetPlugin implements Plugin<Project> {
                         project.tasks.getByName('check').dependsOn(testTask)
                     }
 
-                    IDEPluginConfigurer idePluginConfigurer = new IdeaPluginConfigurer(project)
-                    idePluginConfigurer.configure(sourceSet, facet)
+                    // Idea module.scopes is initialized by the JavaPlugin, without waiting for the Java plugin, we'll
+                    // get an NPE when we access the plus method.
+                    project.plugins.withType(JavaPlugin) {
+                        IDEPluginConfigurer idePluginConfigurer = new IdeaPluginConfigurer(project)
+                        idePluginConfigurer.configure(sourceSet, facet)
+                    }
                 }
             }
         }
