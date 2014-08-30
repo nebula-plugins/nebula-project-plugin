@@ -1,7 +1,8 @@
 package nebula.plugin.responsible
 
 import nebula.core.NamedContainerProperOrder
-import nebula.plugin.responsible.ide.IDEPluginConfigurer
+import nebula.plugin.responsible.ide.EclipsePluginConfigurer
+import nebula.plugin.responsible.ide.IdePluginConfigurer
 import nebula.plugin.responsible.ide.IdeaPluginConfigurer
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectFactory
@@ -71,8 +72,11 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     // Idea module.scopes is initialized by the JavaPlugin, without waiting for the Java plugin, we'll
                     // get an NPE when we access the plus method.
                     project.plugins.withType(JavaPlugin) {
-                        IDEPluginConfigurer idePluginConfigurer = new IdeaPluginConfigurer(project)
+                        IdePluginConfigurer idePluginConfigurer = new IdeaPluginConfigurer(project)
                         idePluginConfigurer.configure(sourceSet, facet)
+
+                        IdePluginConfigurer eclipsePluginConfigurer = new EclipsePluginConfigurer(project)
+                        eclipsePluginConfigurer.configure(sourceSet, facet)
                     }
                 }
             }
