@@ -9,7 +9,7 @@ import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.gradle.plugins.ide.idea.model.IdeaModule
 
-class IdeaPluginConfigurer implements IDEPluginConfigurer {
+class IdeaPluginConfigurer implements IdePluginConfigurer {
     private final Project project
 
     IdeaPluginConfigurer(Project project) {
@@ -22,10 +22,10 @@ class IdeaPluginConfigurer implements IDEPluginConfigurer {
     @Override
     void configure(SourceSet sourceSet, FacetDefinition facet) {
         if(facet instanceof TestFacetDefinition) {
-            configureIdeaPluginForTestSourceSet(sourceSet)
+            configurePluginForTestSourceSet(sourceSet)
         }
         else {
-            configureIdeaPluginForSourceSet(sourceSet)
+            configurePluginForSourceSet(sourceSet)
         }
     }
 
@@ -43,7 +43,7 @@ class IdeaPluginConfigurer implements IDEPluginConfigurer {
      *
      * @param testSourceSet Test SourceSet
      */
-    private void configureIdeaPluginForTestSourceSet(SourceSet testSourceSet) {
+    private void configurePluginForTestSourceSet(SourceSet testSourceSet) {
         withIdeaModule { IdeaModule module ->
             testSourceSet.allSource.srcDirs.each { srcDir ->
                 module.testSourceDirs += srcDir
@@ -59,7 +59,7 @@ class IdeaPluginConfigurer implements IDEPluginConfigurer {
      *
      * @param sourceSet SourceSet
      */
-    private void configureIdeaPluginForSourceSet(SourceSet sourceSet) {
+    private void configurePluginForSourceSet(SourceSet sourceSet) {
         withIdeaModule { IdeaModule module ->
             sourceSet.allSource.srcDirs.each { srcDir ->
                 module.sourceDirs += srcDir

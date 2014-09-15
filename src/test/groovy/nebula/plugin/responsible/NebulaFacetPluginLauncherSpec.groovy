@@ -100,4 +100,35 @@ dependencies {
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('bar-2.4.jar') }
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
     }
+
+    def 'Configures Idea project before java plugin'() {
+        when:
+        MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
+        mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
+
+        buildFile << """
+            ${applyPlugin(NebulaFacetPlugin)}
+            apply plugin: 'idea'
+
+            facets {
+                myCustom
+            }
+
+            apply plugin: 'java'
+
+            repositories {
+                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+            }
+
+            dependencies {
+                myCustomCompile 'foo:bar:2.4'
+                myCustomRuntime 'custom:baz:5.1.27'
+            }
+            """.stripIndent()
+
+        runTasksSuccessfully('idea')
+
+        then:
+        noExceptionThrown()
+    }
 }
