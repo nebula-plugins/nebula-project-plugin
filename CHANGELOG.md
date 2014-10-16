@@ -1,3 +1,48 @@
+1.12.17 / 2014-10-16
+====================
+
+* Updating
+
+1.12.16 / 2014-09-15
+====================
+
+* Updating gradle-info and nebula-publishing versions
+
+1.12.15 / 2014-09-06
+====================
+
+* Improve eclipse project configuration
+
+1.12.14 / 2014-08-26
+====================
+
+* merge
+
+1.12.13 / 2014-08-26
+====================
+
+* Update nebula-publishing and gradle-info versions
+
+1.12.12 / 2014-08-25
+====================
+
+* Update nebula-publishing version
+
+1.12.11 / 2014-08-22
+====================
+
+* Update nebula-publishing version
+
+1.12.10 / 2014-08-22
+====================
+
+* Update nebula-publishing version
+
+1.12.9 / 2014-08-21
+===================
+
+* Update facet plugin to check if java plugin is applied
+
 1.12.8 / 2014-08-15
 ===================
 
