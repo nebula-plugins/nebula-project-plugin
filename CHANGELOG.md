@@ -1,7 +1,17 @@
+2.0.1 / 2014-10-16
+==================
+
+* Updating versions of gradle-dependency-lock, nebula-test, gradle-contacts
+
+2.0.0 / 2014-09-15
+==================
+
+* Upgradle to gradle 2.0
+
 1.12.17 / 2014-10-16
 ====================
 
-* Updating
+* Updating 
 
 1.12.16 / 2014-09-15
 ====================
