@@ -9,7 +9,7 @@ Provides healthy defaults for a Gradle project. Currently adds:
 
 Nebula Facet Plugin
 =======================
-A routine pattern is wanting a new SourceSet with an accompanying Configuration for dependencies. We consider this another facet of your projectand can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequencely it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
+A routine pattern is wanting a new SourceSet with an accompanying Configuration for dependencies. We consider this another facet of your project and can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequencely it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
 
     apply plugin: 'nebula-facet'
     facets {
