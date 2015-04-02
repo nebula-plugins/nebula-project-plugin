@@ -1,3 +1,11 @@
+1.12.18 / 2015-04-02
+====================
+
+* Update plugin versions used
+    * nebula-test 1.12.4 -> 1.12.6
+    * gradle-dependency-lock 1.12.2 -> 1.12.5
+    * nebula-publishing-plugin 1.12.16 -> 1.12.18
+
 1.12.17 / 2014-10-16
 ====================
 
