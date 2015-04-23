@@ -3,6 +3,7 @@ package nebula.plugin.responsible
 import nebula.test.PluginProjectSpec
 import org.gradle.api.Task
 import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.testing.Test
 
 class NebulaFacetPluginSpec extends PluginProjectSpec {
 
@@ -122,5 +123,17 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         project.tasks.getByName('check').dependsOn.any {
             it instanceof Task && ((Task) it).name == 'performanceTest'
         }
+
+        when:
+        project.facets {
+            acceptanceTest
+        }
+        project.dependencies {
+            acceptanceTestRuntime project.files("$project.buildDir/extraclasses")
+        }
+
+        then:
+        Test acceptanceTestTask = project.tasks.getByName('acceptanceTest')
+        acceptanceTestTask.classpath.contains(new File("$project.buildDir/extraclasses"))
     }
 }
