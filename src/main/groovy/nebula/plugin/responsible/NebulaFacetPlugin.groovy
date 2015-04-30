@@ -110,7 +110,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
         sourceSets.create(set.name) {
             compileClasspath += parentSourceSet.output
             compileClasspath += parentSourceSet.compileClasspath
-            runtimeClasspath = it.output + it.compileClasspath
+            runtimeClasspath += it.output + it.compileClasspath
         }
     }
 
