@@ -1,6 +1,6 @@
 buildscript {
     repositories { jcenter() }
-    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:2.2.+' }
+    dependencies { classpath 'com.netflix.nebula:nebula-plugin-plugin:2.4.+' }
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
@@ -24,12 +24,12 @@ contacts {
 }
 
 dependencies {
-    compile 'com.netflix.nebula:nebula-core:2.2.+'
-    compile 'com.netflix.nebula:nebula-publishing-plugin:2.2.+'
-    compile 'com.netflix.nebula:gradle-contacts-plugin:2.2.+'
-    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:2.2.+'
-    compile 'com.netflix.nebula:gradle-info-plugin:2.2.+'
-    testCompile('com.netflix.nebula:nebula-test:2.2.+') {
+    compile 'com.netflix.nebula:nebula-core:2.4.+'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:2.4.+'
+    compile 'com.netflix.nebula:gradle-contacts-plugin:2.4.+'
+    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:2.4.+'
+    compile 'com.netflix.nebula:gradle-info-plugin:2.4.+'
+    testCompile('com.netflix.nebula:nebula-test:2.4.+') {
         exclude group: 'org.codehaus.groovy'
     }
 }
