@@ -1,6 +1,7 @@
 package nebula.plugin.responsible
 
 import nebula.test.IntegrationSpec
+import nebula.test.functional.ExecutionResult
 
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class
@@ -57,6 +58,15 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
 
         then:
         fileExists('build/reports/integTest/index.html')
+    }
+
+    def "check depends on integration test task"() {
+        when:
+        ExecutionResult result = runTasksSuccessfully('check')
+
+        then:
+        result.wasExecuted(':test')
+        result.wasExecuted(':integrationTest')
     }
 
     def "Can configures Idea project"() {
