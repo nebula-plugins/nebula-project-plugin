@@ -9,7 +9,7 @@ class NebulaIntegTestPluginSpec extends PluginProjectSpec {
 
     @Override
     String getPluginName() {
-        return 'nebula-integtest'
+        return 'nebula.integtest'
     }
 
     def 'after applying java plugin'() {

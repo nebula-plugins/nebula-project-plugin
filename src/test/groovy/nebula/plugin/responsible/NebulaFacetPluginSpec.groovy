@@ -6,7 +6,7 @@ import org.gradle.api.tasks.SourceSet
 
 class NebulaFacetPluginSpec extends PluginProjectSpec {
 
-    String getPluginName() { return 'nebula-facet' }
+    String getPluginName() { return 'nebula.facet' }
 
     def 'do nothing without Java plugin'() {
         when:

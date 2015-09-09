@@ -61,11 +61,21 @@ apply from: 'https://raw.githubusercontent.com/nebula-plugins/nebula-core/596569
 
 pluginBundle {
     plugins {
-        dependencyLock {
+        nebulaProject {
             id = 'nebula.project'
             displayName = 'Nebula Project'
             description = project.description
             tags = ['nebula', 'project']
+        }
+        nebulaFacet {
+            id = 'nebula.facet'
+            displayName = 'Nebula Facet'
+            description = 'Reduce boilerplate for adding additional source sets'
+        }
+        nebulaIntegTest {
+            id = 'nebula.integtest'
+            displayName = 'Nebula Integration Test'
+            description = 'Adds source set and task for running integration tests separately from unit tests'
         }
     }
 }
