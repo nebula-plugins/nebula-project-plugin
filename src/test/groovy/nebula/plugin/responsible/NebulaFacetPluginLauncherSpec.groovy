@@ -8,11 +8,11 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
 
         buildFile << """
             apply plugin: 'java'
-            ${applyPlugin(NebulaIntegTestPlugin)}
+            ${applyPlugin(NebulaFacetPlugin)}
             facets {
                 example
             }
-        """.stripIndent()
+        """
 
         when:
         def result = runTasksSuccessfully( 'build' )
@@ -21,29 +21,29 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         result.wasExecuted(':exampleClasses')
     }
 
-    def "Configures Idea project files for a custom test facet"() {
+    def "configures Idea project files for a custom test facet"() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
 
         buildFile << """
-apply plugin: 'java'
-${applyPlugin(NebulaFacetPlugin)}
-apply plugin: 'idea'
+            apply plugin: 'java'
+            ${applyPlugin(NebulaFacetPlugin)}
+            apply plugin: 'idea'
 
-facets {
-    functionalTest
-}
+            facets {
+                functionalTest
+            }
 
-repositories {
-    maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
-}
+            repositories {
+                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+            }
 
-dependencies {
-    functionalTestCompile 'foo:bar:2.4'
-    functionalTestRuntime 'custom:baz:5.1.27'
-}
-"""
+            dependencies {
+                functionalTestCompile 'foo:bar:2.4'
+                functionalTestRuntime 'custom:baz:5.1.27'
+            }
+        """
 
         writeHelloWorld('nebula.plugin.plugin')
         writeTest('src/functionalTest/java/', 'nebula.plugin.plugin', false)
@@ -61,29 +61,29 @@ dependencies {
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
     }
 
-    def "Configures Idea project files for a custom facet"() {
+    def "configures Idea project files for a custom facet"() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
 
         buildFile << """
-apply plugin: 'java'
-${applyPlugin(NebulaFacetPlugin)}
-apply plugin: 'idea'
+            apply plugin: 'java'
+            ${applyPlugin(NebulaFacetPlugin)}
+            apply plugin: 'idea'
 
-facets {
-    myCustom
-}
+            facets {
+                myCustom
+            }
 
-repositories {
-    maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
-}
+            repositories {
+                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+            }
 
-dependencies {
-    myCustomCompile 'foo:bar:2.4'
-    myCustomRuntime 'custom:baz:5.1.27'
-}
-"""
+            dependencies {
+                myCustomCompile 'foo:bar:2.4'
+                myCustomRuntime 'custom:baz:5.1.27'
+            }
+        """
 
         writeHelloWorld('nebula.plugin.plugin')
         writeTest('src/myCustom/java/', 'nebula.plugin.plugin', false)
@@ -101,7 +101,7 @@ dependencies {
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
     }
 
-    def 'Configures Idea project before java plugin'() {
+    def 'configures Idea project before java plugin'() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
@@ -124,7 +124,7 @@ dependencies {
                 myCustomCompile 'foo:bar:2.4'
                 myCustomRuntime 'custom:baz:5.1.27'
             }
-            """.stripIndent()
+        """
 
         runTasksSuccessfully('idea')
 

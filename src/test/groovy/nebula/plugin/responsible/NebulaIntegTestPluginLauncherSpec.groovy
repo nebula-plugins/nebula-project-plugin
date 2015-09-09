@@ -15,7 +15,7 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
         writeResource( 'src/integTest/resources', 'integTest' )
         buildFile << """
             apply plugin: 'java'
-            ${applyPlugin(NebulaIntegTestPlugin)}
+            ${applyPlugin(NebulaIntegTestPlugin.class)}
 
             repositories {
                 mavenCentral()
@@ -24,8 +24,7 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
             dependencies {
                 testCompile 'junit:junit-dep:latest.release'
             }
-
-            """.stripIndent()
+        """
     }
 
     def "compiles integration test classes"() {
@@ -75,17 +74,17 @@ class NebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
 
         buildFile << """
-apply plugin: 'idea'
+            apply plugin: 'idea'
 
-repositories {
-    maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
-}
+            repositories {
+                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+            }
 
-dependencies {
-    integTestCompile 'foo:bar:2.4'
-    integTestRuntime 'custom:baz:5.1.27'
-}
-"""
+            dependencies {
+                integTestCompile 'foo:bar:2.4'
+                integTestRuntime 'custom:baz:5.1.27'
+            }
+        """
 
         writeHelloWorld('nebula.plugin.plugin')
         writeTest("src/$NebulaIntegTestPlugin.FACET_NAME/java/", 'nebula.plugin.plugin', false)

@@ -10,7 +10,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
 
     def 'do nothing without Java plugin'() {
         when:
-        project.apply plugin: NebulaFacetPlugin
+        project.apply plugin: NebulaFacetPlugin.class
         project.facets {
             integTest
         }
@@ -22,7 +22,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
     def 'create functional source set'() {
         when:
         project.apply plugin: 'java'
-        project.apply plugin: NebulaFacetPlugin
+        project.apply plugin: NebulaFacetPlugin.class
         project.facets {
             integTest
         }
@@ -48,7 +48,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
     def 'create multiple source sets'() {
         when:
         project.apply plugin: 'java'
-        project.apply plugin: NebulaFacetPlugin
+        project.apply plugin: NebulaFacetPlugin.class
         project.facets {
             examples
             samples
@@ -60,7 +60,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
 
     def 'can run without sourcesets'() {
         when:
-        project.apply plugin: NebulaFacetPlugin
+        project.apply plugin: NebulaFacetPlugin.class
         project.apply plugin: 'java-base'
         project.facets {
             examples
@@ -80,7 +80,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
     def 'configure facets'() {
         when:
         project.apply plugin: 'java'
-        project.apply plugin: NebulaFacetPlugin
+        project.apply plugin: NebulaFacetPlugin.class
         project.facets {
             examples {
                 parentSourceSet = 'test'

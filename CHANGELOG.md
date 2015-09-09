@@ -1,3 +1,12 @@
+3.0.0 / 2015-09-09
+==================
+
+* Remove FixJavaPlugin
+* Apply new publishing plugins
+* Update plugin versions used
+    * gradle-dependency-lock 2.2.3 -> 3.0.0
+    * nebula-publishing-plugin 2.2.1 -> 4.0.1
+
 2.2.1 / 2015-04-02
 ==================
 

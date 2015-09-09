@@ -50,11 +50,11 @@ contacts {
 }
 
 dependencies {
-    compile 'com.netflix.nebula:nebula-core:2.2.+'
-    compile 'com.netflix.nebula:nebula-publishing-plugin:2.2.+'
-    compile 'com.netflix.nebula:gradle-contacts-plugin:2.2.+'
-    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:2.2.+'
-    compile 'com.netflix.nebula:gradle-info-plugin:2.2.+'
+    compile 'com.netflix.nebula:nebula-core:latest.release'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:latest.release'
+    compile 'com.netflix.nebula:gradle-contacts-plugin:latest.release'
+    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:latest.release'
+    compile 'com.netflix.nebula:gradle-info-plugin:latest.release'
 }
 
 apply from: 'https://raw.githubusercontent.com/nebula-plugins/nebula-core/596569bf3e7bd32da076784a8273dbd145bc016f/common.gradle'
