@@ -71,11 +71,13 @@ pluginBundle {
             id = 'nebula.facet'
             displayName = 'Nebula Facet'
             description = 'Reduce boilerplate for adding additional source sets'
+            tags = ['nebula', 'project']
         }
         nebulaIntegTest {
             id = 'nebula.integtest'
             displayName = 'Nebula Integration Test'
             description = 'Adds source set and task for running integration tests separately from unit tests'
+            tags = ['nebula', 'project']
         }
     }
 }
