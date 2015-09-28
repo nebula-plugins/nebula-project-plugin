@@ -16,7 +16,7 @@ Nebula Facet Plugin
 =======================
 A routine pattern is wanting a new SourceSet with an accompanying Configuration for dependencies. We consider this another facet of your project and can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequencely it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
 
-    apply plugin: 'nebula-facet'
+    apply plugin: 'nebula.facet'
     facets {
         examples
         performance
@@ -54,6 +54,6 @@ Nebula IntegTest Plugin
 =======================
 A correlary from the Facet Plugin is a concrete Facet, this plugin provide one specifically for Integration Tests. By applying this plugin, you'll get a integrationTest Test task, where sources go in src/integTest/java and dependencies can go into integTestCompile and integTestRuntime (which extend from the test SourceSet). E.g.
 
-    apply plugin: 'nebula-integtest'
+    apply plugin: 'nebula.integtest'
 
 
