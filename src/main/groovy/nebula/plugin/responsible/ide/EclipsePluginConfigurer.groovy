@@ -44,10 +44,6 @@ class EclipsePluginConfigurer implements IdePluginConfigurer {
      */
     private void configurePluginForSourceSet(SourceSet sourceSet) {
         withEclipseModel { EclipseModel model ->
-//            testSourceSet.allSource.srcDirs.each { srcDir ->
-//                module.testSourceDirs += srcDir
-//            }
-
             model.classpath.plusConfigurations += [ getConfiguration(sourceSet.compileConfigurationName) ]
             model.classpath.plusConfigurations += [ getConfiguration(sourceSet.runtimeConfigurationName) ]
         }
@@ -60,14 +56,8 @@ class EclipsePluginConfigurer implements IdePluginConfigurer {
      */
     private void configurePluginForTestSourceSet(SourceSet sourceSet) {
         withEclipseModel { EclipseModel model ->
-//            testSourceSet.allSource.srcDirs.each { srcDir ->
-//                module.testSourceDirs += srcDir
-//            }
-
             model.classpath.plusConfigurations += [ getConfiguration(sourceSet.compileConfigurationName) ]
             model.classpath.plusConfigurations += [ getConfiguration(sourceSet.runtimeConfigurationName) ]
-            model.classpath.noExportConfigurations += [ getConfiguration(sourceSet.compileConfigurationName) ]
-            model.classpath.noExportConfigurations += [ getConfiguration(sourceSet.runtimeConfigurationName) ]
         }
     }
 
