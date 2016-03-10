@@ -14,7 +14,7 @@ Provides healthy defaults for a Gradle project. Currently adds:
 
 Nebula Facet Plugin
 =======================
-A routine pattern is wanting a new SourceSet with an accompanying Configuration for dependencies. We consider this another facet of your project and can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequencely it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
+A routine pattern is wanting a new SourceSet with an accompanying Configuration for dependencies. We consider this another facet of your project and can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequently it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
 
     apply plugin: 'nebula.facet'
     facets {
@@ -22,7 +22,7 @@ A routine pattern is wanting a new SourceSet with an accompanying Configuration 
         performance
     }
 
-The previous definition would make a examples and performance SourceSet, so that code can go in src/examples/java and src/performance/java. It'll get four configurations: examplesCompile, examplesRuntime, performanceCompile, performanceRuntime. Those configuration will extends compile and runtime respectively. Each one can be configured to inherit from another SourceSet, e.g.
+The previous definition would make examples and performance SourceSets, so that code can go in src/examples/java and src/performance/java. It'll get four configurations: examplesCompile, examplesRuntime, performanceCompile, performanceRuntime. Those configuration will extends compile and runtime respectively. Each one can be configured to inherit from another SourceSet, e.g.
 
     facets {
         functional {
@@ -30,7 +30,7 @@ The previous definition would make a examples and performance SourceSet, so that
         }
     }
 
-That will cause the functionCompile to extend from testCompile, and functionalRuntime to extend from testRuntime, since those are the configurations from the "test" SourceSet.  
+That will cause the functionalCompile to extend from testCompile, and functionalRuntime to extend from testRuntime, since those are the configurations from the "test" SourceSet.  
 
 Test Facets
 --------------
