@@ -35,13 +35,13 @@ That will cause the functionalCompile to extend from testCompile, and functional
 Test Facets
 --------------
 
-If "Test" is in the facet name, then a Test task would be created (though it'll still inherit from the "main" SourceSet", use the above configuration to make the test facet extends from the test SourceSet). E.g.
+If "Test" is in the facet name, then a Test task would be created (though it'll still inherit from the "main" SourceSet, use the above configuration to make the test facet extends from the test SourceSet). For example:
 
     facets {
         integTest
     }
 
-That will create a test task called integTest in addition to the integTest SourceSet. The parent SourceSet can still be overriden like above, and the task name can be set:
+This will create a test task called integTest in addition to the integTest SourceSet. The parent SourceSet can still be overriden like above, and the task name can be set:
 
     facets {
         integTest {
@@ -52,7 +52,7 @@ That will create a test task called integTest in addition to the integTest Sourc
 
 Nebula IntegTest Plugin
 =======================
-A correlary from the Facet Plugin is a concrete Facet, this plugin provide one specifically for Integration Tests. By applying this plugin, you'll get a integrationTest Test task, where sources go in src/integTest/java and dependencies can go into integTestCompile and integTestRuntime (which extend from the test SourceSet). E.g.
+A corrolary from the Facet Plugin is a concrete Facet, this plugin provides one specifically for Integration Tests. By applying this plugin, you'll get an integrationTest Test task, where sources go in src/integTest/java and dependencies can go into integTestCompile and integTestRuntime (which extend from the test SourceSet). For example:
 
     apply plugin: 'nebula.integtest'
 
