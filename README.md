@@ -46,7 +46,7 @@ This will create a test task called integTest in addition to the integTest Sourc
     facets {
         integTest {
             parentSourceSet = 'main'
-            testTaskName = 'integrationTest'
+            name = 'integrationTest'
         }
     }
 
