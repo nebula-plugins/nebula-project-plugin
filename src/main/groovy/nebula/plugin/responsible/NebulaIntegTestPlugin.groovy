@@ -14,14 +14,19 @@ class NebulaIntegTestPlugin implements Plugin<Project> {
     static final String FACET_NAME = 'integTest'
 
     @Override
-    void apply( Project project ) {
+    void apply(Project project) {
         def facetPlugin = project.plugins.apply(NebulaFacetPlugin)
 
         project.plugins.withType(JavaPlugin) {
             facetPlugin.extension.create(FACET_NAME) {
                 testTaskName = 'integrationTest'
                 parentSourceSet = 'test'
+                includeInCheckLifecycle = shouldIncludeInCheckLifecycle()
             }
         }
+    }
+
+    protected boolean shouldIncludeInCheckLifecycle() {
+        return true
     }
 }

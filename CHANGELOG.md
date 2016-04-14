@@ -1,3 +1,8 @@
+3.1.0 / 2015-03-14
+==================
+
+* Add nebula.integtest-standalone plugin that applies the concrete integration test facet, without 'check' depending on the task
+
 3.0.1 / 2015-09-09
 ==================
 

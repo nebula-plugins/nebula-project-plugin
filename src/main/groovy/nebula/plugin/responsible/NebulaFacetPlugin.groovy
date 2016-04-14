@@ -62,11 +62,12 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
 
                     if (facet instanceof TestFacetDefinition) {
-
                         Test testTask = createTestTask(facet.testTaskName, sourceSet)
 
                         testTask.mustRunAfter(project.tasks.getByName('test'))
-                        project.tasks.getByName('check').dependsOn(testTask)
+                        if (facet.includeInCheckLifecycle) {
+                            project.tasks.getByName('check').dependsOn(testTask)
+                        }
                     }
 
                     // Idea module.scopes is initialized by the JavaPlugin, without waiting for the Java plugin, we'll

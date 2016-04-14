@@ -22,4 +22,9 @@ class TestFacetDefinition extends FacetDefinition {
     def getTestTaskName() {
         testTaskName ?: getName()
     }
+
+    /**
+     * Whether the task created for the test facet should be a dependency of 'check'.
+     */
+    boolean includeInCheckLifecycle = true
 }

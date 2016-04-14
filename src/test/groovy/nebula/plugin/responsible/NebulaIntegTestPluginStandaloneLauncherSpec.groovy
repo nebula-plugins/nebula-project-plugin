@@ -7,18 +7,18 @@ import org.gradle.api.Project
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class
  */
-class NebulaIntegTestPluginLauncherSpec extends AbstractNebulaIntegTestPluginLauncherSpec {
+class NebulaIntegTestPluginStandaloneLauncherSpec extends AbstractNebulaIntegTestPluginLauncherSpec {
     @Override
     Class<Plugin<Project>> getPluginClass() {
-        return NebulaIntegTestPlugin.class
+        return NebulaIntegTestStandalonePlugin.class
     }
 
-    def "check depends on integration test task"() {
+    def "check does not depend on integration test task"() {
         when:
         ExecutionResult result = runTasksSuccessfully('check')
 
         then:
         result.wasExecuted(':test')
-        result.wasExecuted(':integrationTest')
+        !result.wasExecuted(':integrationTest')
     }
 }
