@@ -50,6 +50,16 @@ This will create a test task called integTest in addition to the integTest Sourc
         }
     }
 
+Test facets may opt out of a dependency on the 'check' task by using `includeInCheckLifecycle`:
+
+    facets {
+        integTest {
+            parentSourceSet = 'main'
+            testTaskName = 'integrationTest'
+            includeInCheckLifecycle = false
+        }
+    }
+
 Nebula IntegTest Plugin
 =======================
 A corrolary from the Facet Plugin is a concrete Facet, this plugin provides one specifically for Integration Tests. By applying this plugin, you'll get an `integrationTest` Test task, where sources go in `src/integTest/java` and dependencies can go into `integTestCompile` and `integTestRuntime` (which extend from the test SourceSet), with the 'check' task depending on the task. To apply the plugin:
