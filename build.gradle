@@ -17,32 +17,26 @@
 
 plugins {
     id 'com.gradle.plugin-publish' version '0.9.4'
-    id 'nebula.plugin-plugin' version '4.20.0'
+//    id 'nebula.plugin-plugin' version '4.21.0'
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
 
-contacts {
-    'justin@halfempty.org' {
-        moniker 'Justin Ryan'
-        github 'quidryan'
-    }
-    'rob.spieldenner@gmail.com' {
-        moniker 'Rob Spieldenner'
-        github 'rspieldenner'
-    }
-    'jmcgarr@gmail.com' {
-        moniker 'Mike McGarr'
-        github 'jmcgarr'
-    }
+repositories {
+    jcenter()
 }
 
 dependencies {
+    compile gradleApi()
     compile 'com.netflix.nebula:nebula-core:latest.release'
     compile 'com.netflix.nebula:nebula-publishing-plugin:latest.release'
     compile 'com.netflix.nebula:gradle-contacts-plugin:latest.release'
     compile 'com.netflix.nebula:gradle-dependency-lock-plugin:latest.release'
     compile 'com.netflix.nebula:gradle-info-plugin:latest.release'
+
+    testCompile('com.netflix.nebula:nebula-test:4.2.2') {
+        exclude group: 'org.codehaus.groovy'
+    }
 }
 
 pluginBundle {
