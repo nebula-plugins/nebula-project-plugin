@@ -9,7 +9,7 @@ import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.internal.project.AbstractProject
+import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
@@ -30,7 +30,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
         extension = container(FacetDefinition, new NamedDomainObjectFactory<FacetDefinition>() {
             @Override
             FacetDefinition create(String name) {
-                if ( name.contains('Test') ) {
+                if (name.contains('Test')) {
                     return new TestFacetDefinition(name)
                 } else {
                     return new FacetDefinition(name)
@@ -47,7 +47,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
                 JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
                 SourceSetContainer sourceSets = javaConvention.sourceSets
-                sourceSets.matching { it.name == facet.parentSourceSet } .all { SourceSet parentSourceSet ->
+                sourceSets.matching { it.name == facet.parentSourceSet }.all { SourceSet parentSourceSet ->
 
                     // Since we're using NamedContainerProperOrder, we're configured already.
                     SourceSet sourceSet = createSourceSet(parentSourceSet, facet)
@@ -90,12 +90,12 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @param sourceSet to be used for the integration test task.
      * @return the integration test task, as a Gradle Test object.
      */
-    Test createTestTask( String testName, SourceSet sourceSet ) {
-        Test task = project.tasks.create( testName, Test )
-        task.setGroup( JavaBasePlugin.VERIFICATION_GROUP )
-        task.description( "Runs the ${sourceSet.name} tests" )
-        task.reports.html.destination = new File( "${project.buildDir}/reports/${sourceSet.name}" )
-        task.reports.junitXml.destination = new File( "${project.buildDir}/${sourceSet.name}-results" )
+    Test createTestTask(String testName, SourceSet sourceSet) {
+        Test task = project.tasks.create(testName, Test)
+        task.setGroup(JavaBasePlugin.VERIFICATION_GROUP)
+        task.description("Runs the ${sourceSet.name} tests")
+        task.reports.html.destination = new File("${project.buildDir}/reports/${sourceSet.name}")
+        task.reports.junitXml.destination = new File("${project.buildDir}/${sourceSet.name}-results")
         task.testClassesDir = sourceSet.output.classesDir
         task.classpath = sourceSet.runtimeClasspath
         task
@@ -116,7 +116,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
     }
 
     public <C> NamedContainerProperOrder<C> container(Class<C> type, NamedDomainObjectFactory<C> factory) {
-        Instantiator instantiator = ((AbstractProject) project).getServices().get(Instantiator.class);
+        Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class);
         return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory);
     }
 
