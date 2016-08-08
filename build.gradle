@@ -38,11 +38,11 @@ contacts {
 }
 
 dependencies {
-    compile 'com.netflix.nebula:nebula-core:4.0.1'
-    compile 'com.netflix.nebula:nebula-publishing-plugin:4.7.0'
-    compile 'com.netflix.nebula:gradle-contacts-plugin:3.0.1'
-    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:4.3.0'
-    compile 'com.netflix.nebula:gradle-info-plugin:3.1.0'
+    compile 'com.netflix.nebula:nebula-core:4.0.0'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:latest.release'
+    compile 'com.netflix.nebula:gradle-contacts-plugin:latest.release'
+    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:latest.release'
+    compile 'com.netflix.nebula:gradle-info-plugin:latest.release'
 }
 
 pluginBundle {
