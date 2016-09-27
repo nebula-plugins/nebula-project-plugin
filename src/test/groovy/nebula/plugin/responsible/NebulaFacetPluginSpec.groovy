@@ -39,10 +39,10 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         project.configurations.size() == 25
         def compileConf = project.configurations.getByName('integTestCompile')
         compileConf
-        compileConf.extendsFrom.any { it.name == 'compile'}
+        compileConf.extendsFrom.any { it.name == 'testCompile'}
         def runtimeConf = project.configurations.getByName('integTestRuntime')
         runtimeConf
-        runtimeConf.extendsFrom.any { it.name == 'runtime'}
+        runtimeConf.extendsFrom.any { it.name == 'testRuntime'}
     }
 
     def 'create multiple source sets'() {
@@ -93,7 +93,24 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         def compileConf = project.configurations.getByName('examplesCompile')
         compileConf
         compileConf.extendsFrom.any { it.name == 'testCompile'}
+    }
 
+    def 'configure test facet'() {
+        when:
+        project.apply plugin: 'java'
+        project.apply plugin: NebulaFacetPlugin.class
+        project.facets {
+            examplesTest {
+                parentSourceSet = 'main'
+            }
+        }
+
+        then:
+        project.sourceSets.size() == 3
+
+        def compileConf = project.configurations.getByName('examplesTestCompile')
+        compileConf
+        compileConf.extendsFrom.any { it.name == 'compile'}
     }
 
     def 'test based facet'() {
@@ -122,5 +139,37 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         project.tasks.getByName('check').dependsOn.any {
             it instanceof Task && ((Task) it).name == 'performanceTest'
         }
+    }
+
+    def 'default parent sourceset is main'() {
+        when:
+        project.apply plugin: 'java'
+        project.apply plugin: NebulaFacetPlugin.class
+        project.facets {
+            examples
+        }
+
+        then:
+        project.sourceSets.size() == 3
+
+        def compileConf = project.configurations.getByName('examplesCompile')
+        compileConf
+        compileConf.extendsFrom.any { it.name == 'compile' }
+    }
+
+    def 'default parent sourceset for tests is test'() {
+        when:
+        project.apply plugin: 'java'
+        project.apply plugin: NebulaFacetPlugin.class
+        project.facets {
+            examplesTest
+        }
+
+        then:
+        project.sourceSets.size() == 3
+
+        def compileConf = project.configurations.getByName('examplesTestCompile')
+        compileConf
+        compileConf.extendsFrom.any { it.name == 'testCompile' }
     }
 }

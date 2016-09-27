@@ -19,7 +19,10 @@ class FacetDefinition implements Named {
     String parentSourceSet
 
     def getParentSourceSet() {
-        return parentSourceSet ?: 'main'
+        return parentSourceSet ?: this.defaultParentSourceSet
     }
 
+    protected getDefaultParentSourceSet() {
+        return 'main'
+    }
 }

@@ -27,4 +27,9 @@ class TestFacetDefinition extends FacetDefinition {
      * Whether the task created for the test facet should be a dependency of 'check'.
      */
     boolean includeInCheckLifecycle = true
+
+    @Override
+    protected getDefaultParentSourceSet() {
+        return 'test'
+    }
 }
