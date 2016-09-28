@@ -36,7 +36,7 @@ That will cause the functionalCompile to extend from testCompile, and functional
 Test Facets
 --------------
 
-If "Test" is in the facet name, then a Test task would be created (though it'll still inherit from the "main" SourceSet, use the above configuration to make the test facet extends from the test SourceSet). For example:
+If "Test" is in the facet name, then a Test task would be created which will inherit from the "test" SourceSet unless configured otherwise. For example:
 
     facets {
         integTest
