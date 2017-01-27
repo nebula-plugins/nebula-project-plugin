@@ -36,7 +36,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         integTest.compileClasspath.files.find { 'src/integTest'}
         integTest.runtimeConfigurationName == 'integTestRuntime'
 
-        project.configurations.size() == 14
+        project.configurations.size() == 25
         def compileConf = project.configurations.getByName('integTestCompile')
         compileConf
         compileConf.extendsFrom.any { it.name == 'compile'}
