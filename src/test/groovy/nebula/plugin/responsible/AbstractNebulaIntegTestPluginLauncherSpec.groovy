@@ -36,7 +36,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
         runTasksSuccessfully('integrationTest')
 
         then:
-        fileExists("build/classes/integTest/$fakePackage/HelloWorldTest.class")
+        fileExists("build/classes/java/integTest/$fakePackage/HelloWorldTest.class")
     }
 
     def "copies integTest resources"() {
