@@ -1,5 +1,6 @@
 package nebula.plugin.responsible
 
+import com.netflix.nebula.interop.GradleKt
 import nebula.core.NamedContainerProperOrder
 import nebula.plugin.responsible.ide.EclipsePluginConfigurer
 import nebula.plugin.responsible.ide.IdePluginConfigurer
@@ -96,7 +97,11 @@ class NebulaFacetPlugin implements Plugin<Project> {
         task.description("Runs the ${sourceSet.name} tests")
         task.reports.html.destination = new File("${project.buildDir}/reports/${sourceSet.name}")
         task.reports.junitXml.destination = new File("${project.buildDir}/${sourceSet.name}-results")
-        task.testClassesDir = sourceSet.output.classesDir
+        if (GradleKt.versionLessThan(project.gradle, "4.0")) {
+            task.testClassesDir = sourceSet.output.classesDir
+        } else {
+            task.testClassesDirs = sourceSet.output.classesDirs
+        }
         task.classpath = sourceSet.runtimeClasspath
         task
     }
