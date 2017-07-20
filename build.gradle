@@ -45,6 +45,9 @@ dependencies {
     compile 'com.netflix.nebula:gradle-info-plugin:3.6.0'
 }
 
+// We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file
+ext.set("dependencyLock.ignore", "true")
+
 pluginBundle {
     plugins {
         nebulaProject {
