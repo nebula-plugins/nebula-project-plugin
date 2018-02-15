@@ -22,7 +22,9 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         this.project = project
 
         // Publishing
-        project.plugins.apply(MavenPublishPlugin)
+        if (isBuildingSomething(project)) {
+            project.plugins.apply(MavenPublishPlugin)
+        }
         project.plugins.apply(JavadocJarPlugin)
         project.plugins.apply(SourceJarPlugin)
 
@@ -42,5 +44,10 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         project.tasks.withType(Test) { Test testTask ->
             testTask.testLogging.exceptionFormat = 'full'
         }
+    }
+
+    private boolean isBuildingSomething(Project project) {
+        def isParentProject = project.rootProject.subprojects.any { it.parent == project }
+        return !isParentProject
     }
 }
