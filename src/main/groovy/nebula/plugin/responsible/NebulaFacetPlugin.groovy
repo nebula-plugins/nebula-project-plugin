@@ -64,8 +64,6 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
                     if (facet instanceof TestFacetDefinition) {
                         Test testTask = createTestTask(facet.testTaskName, sourceSet)
-
-                        testTask.mustRunAfter(project.tasks.getByName('test'))
                         if (facet.includeInCheckLifecycle) {
                             project.tasks.getByName('check').dependsOn(testTask)
                         }
