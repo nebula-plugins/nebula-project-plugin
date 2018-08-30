@@ -17,9 +17,13 @@ class FacetDefinition implements Named {
 
     String name
     String parentSourceSet
+    String srcDir
 
     def getParentSourceSet() {
         return parentSourceSet ?: 'main'
     }
 
+    def getSrcDir() {
+        return srcDir ?: name
+    }
 }

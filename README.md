@@ -33,6 +33,16 @@ The previous definition would make examples and performance SourceSets, so that 
 
 That will cause the functionalCompile to extend from testCompile, and functionalRuntime to extend from testRuntime, since those are the configurations from the "test" SourceSet.  
 
+The source directory defaults to the name of the facet, but this can be overridden if necessary, e.g.
+
+    facets {
+        performance {
+            srcDir = 'perf'
+        }
+    }
+
+This will create a performance SourceSet for code contained in src/perf/java.
+
 Test Facets
 --------------
 
@@ -42,12 +52,13 @@ If "Test" is in the facet name, then a Test task would be created (though it'll 
         integTest
     }
 
-This will create a test task called integTest in addition to the integTest SourceSet. The parent SourceSet can still be overriden like above, and the task name can be set:
+This will create a test task called integTest in addition to the integTest SourceSet. The parent SourceSet can still be overriden like above, and the task name and source directory can be set:
 
     facets {
         integTest {
             parentSourceSet = 'main'
             testTaskName = 'integrationTest'
+            srcDir = 'integ-test'
         }
     }
 
@@ -57,6 +68,7 @@ Test facets may opt out of a dependency on the 'check' task by using `includeInC
         integTest {
             parentSourceSet = 'main'
             testTaskName = 'integrationTest'
+            srcDir = 'integ-test'
             includeInCheckLifecycle = false
         }
     }

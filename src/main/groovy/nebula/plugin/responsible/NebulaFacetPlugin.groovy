@@ -117,6 +117,19 @@ class NebulaFacetPlugin implements Plugin<Project> {
             compileClasspath += parentSourceSet.output
             compileClasspath += parentSourceSet.compileClasspath
             runtimeClasspath += it.output + it.compileClasspath
+
+            if (set.srcDir != set.name) {
+                applySrcDirOverride(it, set.srcDir)
+            }
+        }
+    }
+
+    void applySrcDirOverride(SourceSet srcSet, String srcDir) {
+        def srcProperties = ['java', 'resources', 'antlr', 'groovy', 'scala']
+        srcProperties.each {
+            if (srcSet.hasProperty(it)) {
+                srcSet."$it".srcDirs = [ "src/${srcDir}/$it" ]
+            }
         }
     }
 

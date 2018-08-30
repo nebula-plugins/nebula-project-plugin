@@ -123,4 +123,23 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
             it instanceof Task && ((Task) it).name == 'performanceTest'
         }
     }
+
+    def 'override source dir'() {
+        when:
+        project.apply plugin: 'java'
+        project.apply plugin: 'groovy'
+        project.apply plugin: NebulaFacetPlugin.class
+        project.facets {
+            integrationTest {
+                srcDir = 'integration-test'
+            }
+        }
+
+        then:
+        def integrationTest = project.sourceSets.find { it.name == 'integrationTest' } as SourceSet
+        integrationTest
+        integrationTest.allJava.srcDirs.find { it.path.endsWith('src/integration-test/java') }
+        integrationTest.allGroovy.srcDirs.find { it.path.endsWith('src/integration-test/groovy') }
+        integrationTest.resources.srcDirs.find { it.path.endsWith('src/integration-test/resources') }
+    }
 }
