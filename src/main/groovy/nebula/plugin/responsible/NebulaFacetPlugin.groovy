@@ -95,13 +95,9 @@ class NebulaFacetPlugin implements Plugin<Project> {
         Test task = project.tasks.create(testName, Test)
         task.setGroup(JavaBasePlugin.VERIFICATION_GROUP)
         task.description("Runs the ${sourceSet.name} tests")
-        task.reports.html.destination = new File("${project.buildDir}/reports/${sourceSet.name}")
-        task.reports.junitXml.destination = new File("${project.buildDir}/${sourceSet.name}-results")
-        if (GradleKt.versionLessThan(project.gradle, "4.0")) {
-            task.testClassesDir = sourceSet.output.classesDir
-        } else {
-            task.testClassesDirs = sourceSet.output.classesDirs
-        }
+        task.reports.html.setDestination(new File("${project.buildDir}/reports/${sourceSet.name}"))
+        task.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
+        task.testClassesDirs = sourceSet.output.classesDirs
         task.classpath = sourceSet.runtimeClasspath
         task
     }
