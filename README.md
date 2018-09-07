@@ -13,6 +13,12 @@ Provides healthy defaults for a Gradle project. Currently adds:
 * Easy specification of people involved in a project via gradle-contacts-plugin
 * Doesn't fail javadoc if there are none found
 
+Compatibilty notes
+======================
+This plugin uses APIs that are not available on Gradle < 4.0.
+
+From v5.0.0, nebula-project-plugin supports only Gradle 4.0+
+
 Nebula Facet Plugin
 =======================
 A routine pattern is wanting a new SourceSet with an accompanying Configuration for dependencies. We consider this another facet of your project and can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequently it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
