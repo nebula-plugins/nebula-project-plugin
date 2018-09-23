@@ -16,7 +16,7 @@
 
 
 plugins {
-    id 'nebula.plugin-plugin' version '8.1.0'
+    id 'nebula.plugin-plugin' version '8.1.2'
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
@@ -37,12 +37,12 @@ contacts {
 }
 
 dependencies {
-    compile 'com.netflix.nebula:nebula-gradle-interop:0.5.0'
+    compile 'com.netflix.nebula:nebula-gradle-interop:1.0.2'
     compile 'com.netflix.nebula:nebula-core:4.0.1'
-    compile 'com.netflix.nebula:nebula-publishing-plugin:5.1.5'
-    compile 'com.netflix.nebula:gradle-contacts-plugin:3.0.1'
-    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:6.0.0'
-    compile 'com.netflix.nebula:gradle-info-plugin:3.6.0'
+    compile 'com.netflix.nebula:nebula-publishing-plugin:9.0.2'
+    compile 'com.netflix.nebula:gradle-contacts-plugin:4.0.2'
+    compile 'com.netflix.nebula:gradle-dependency-lock-plugin:6.1.2'
+    compile 'com.netflix.nebula:gradle-info-plugin:4.0.2'
 }
 
 // We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file
