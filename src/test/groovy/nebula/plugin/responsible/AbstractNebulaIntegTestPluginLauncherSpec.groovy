@@ -26,7 +26,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
             }
 
             dependencies {
-                testCompile 'junit:junit-dep:latest.release'
+                testCompile 'junit:junit:latest.release'
             }
         """
     }
