@@ -133,8 +133,20 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
     }
 
     def 'smoke tests with runtime dependencies'() {
-        createFile('src/resources/application.yml') << """
-app.name=helloapp
+        createFile('src/test/resources/application.yml') << """
+spring:
+  application.name: myapp
+logging:
+  level:
+    org.springframework.web: DEBUG 
+"""
+
+        createFile('src/test/resources/bootstrap.yml') << """
+spring:
+  application.name: myapp
+logging:
+  level:
+    org.springframework.web: DEBUG 
 """
         createFile('src/main/java/com/netflix/Application.java') << """
 package com.netflix;
