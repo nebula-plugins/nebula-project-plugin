@@ -132,7 +132,7 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         noExceptionThrown()
     }
 
-    def 'smoke tests with runtime dependencies'() {
+    def 'makes sure we can extend implementation configurations'() {
         createFile('src/test/resources/application.yml') << """
 spring:
   application.name: myapp
