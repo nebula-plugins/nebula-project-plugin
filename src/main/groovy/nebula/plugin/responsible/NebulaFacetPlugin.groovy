@@ -59,6 +59,12 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     Configuration parentRuntime = project.configurations.getByName(parentSourceSet.runtimeConfigurationName)
                     project.configurations.getByName(sourceSet.runtimeConfigurationName).extendsFrom(parentRuntime)
 
+                    Configuration parentImplementation = project.configurations.getByName(parentSourceSet.implementationConfigurationName)
+                    project.configurations.getByName(sourceSet.implementationConfigurationName).extendsFrom(parentImplementation)
+
+                    Configuration parentRuntimeOnly = project.configurations.getByName(parentSourceSet.runtimeOnlyConfigurationName)
+                    project.configurations.getByName(sourceSet.runtimeOnlyConfigurationName).extendsFrom(parentRuntimeOnly)
+
                     // Make sure at the classes get built as part of build
                     project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
 
