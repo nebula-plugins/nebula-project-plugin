@@ -265,4 +265,37 @@ ${applyPlugin(NebulaFacetPlugin)}
         result.wasExecuted(':smokeTest')
     }
 
+    def 'makes sure we can extend annotationProcessor configurations'() {
+        buildFile << """
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+${applyPlugin(NebulaFacetPlugin)}
+
+            repositories {
+                mavenCentral() 
+            }
+
+            dependencies {
+                testAnnotationProcessor("junit:junit:4.12")
+            }
+            facets {
+                smokeTest {
+                    parentSourceSet = 'test'
+                }
+            }
+        """
+
+        when:
+        def result = runTasksSuccessfully( 'dependencies', '--configuration', 'smokeTestAnnotationProcessor' )
+
+        then:
+        result.standardOutput.contains("""smokeTestAnnotationProcessor - Annotation processors and their dependencies for source set 'smoke test'.
+\\--- junit:junit:4.12""")
+    }
+
 }
