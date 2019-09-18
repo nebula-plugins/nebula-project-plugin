@@ -1,6 +1,7 @@
 package nebula.plugin.responsible
 
 import groovy.transform.Canonical
+import groovy.transform.CompileStatic
 
 /**
  * Definition of a source facet, which via the NebulaFacetPlugin will create
@@ -8,6 +9,7 @@ import groovy.transform.Canonical
  * directory and the prefix for configurations.
  */
 @Canonical
+@CompileStatic
 class TestFacetDefinition extends FacetDefinition {
 
     public TestFacetDefinition(String name) {
@@ -19,7 +21,7 @@ class TestFacetDefinition extends FacetDefinition {
      */
     String testTaskName
 
-    def getTestTaskName() {
+    String getTestTaskName() {
         testTaskName ?: getName()
     }
 

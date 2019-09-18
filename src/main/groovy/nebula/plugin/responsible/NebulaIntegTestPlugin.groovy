@@ -1,5 +1,6 @@
 package nebula.plugin.responsible
 
+import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -10,18 +11,21 @@ import org.gradle.api.plugins.JavaPlugin
  * longer running tests.  The plugin expects that all integration tests are
  * located in 'src/integTest/java'.
  */
+@CompileStatic
 class NebulaIntegTestPlugin implements Plugin<Project> {
     static final String FACET_NAME = 'integTest'
+    static final String TASK_NAME = 'integrationTest'
+    static final String PARENT_SOURCE_SET = 'test'
 
     @Override
     void apply(Project project) {
-        def facetPlugin = project.plugins.apply(NebulaFacetPlugin)
+        NebulaFacetPlugin facetPlugin = project.plugins.apply(NebulaFacetPlugin) as NebulaFacetPlugin
 
         project.plugins.withType(JavaPlugin) {
-            facetPlugin.extension.create(FACET_NAME) {
-                testTaskName = 'integrationTest'
-                parentSourceSet = 'test'
-                includeInCheckLifecycle = shouldIncludeInCheckLifecycle()
+            facetPlugin.extension.create(FACET_NAME) { TestFacetDefinition facet ->
+                facet.setTestTaskName(TASK_NAME)
+                facet.setParentSourceSet(PARENT_SOURCE_SET)
+                facet.setIncludeInCheckLifecycle(shouldIncludeInCheckLifecycle())
             }
         }
     }

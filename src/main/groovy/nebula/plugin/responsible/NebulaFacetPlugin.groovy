@@ -1,6 +1,7 @@
 package nebula.plugin.responsible
 
 import com.netflix.nebula.interop.GradleKt
+import groovy.transform.CompileStatic
 import nebula.core.NamedContainerProperOrder
 import nebula.plugin.responsible.ide.EclipsePluginConfigurer
 import nebula.plugin.responsible.ide.IdePluginConfigurer
@@ -19,6 +20,7 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.testing.Test
 import org.gradle.internal.reflect.Instantiator
 
+@CompileStatic
 class NebulaFacetPlugin implements Plugin<Project> {
 
     Project project
@@ -48,7 +50,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
                 JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
                 SourceSetContainer sourceSets = javaConvention.sourceSets
-                sourceSets.matching { it.name == facet.parentSourceSet }.all { SourceSet parentSourceSet ->
+                sourceSets.matching { SourceSet sourceSet -> sourceSet.name == facet.parentSourceSet }.all { SourceSet parentSourceSet ->
 
                     // Since we're using NamedContainerProperOrder, we're configured already.
                     SourceSet sourceSet = createSourceSet(parentSourceSet, facet)
@@ -72,7 +74,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
 
                     if (facet instanceof TestFacetDefinition) {
-                        Test testTask = createTestTask(facet.testTaskName, sourceSet)
+                        Test testTask = createTestTask(facet.testTaskName.toString(), sourceSet)
 
                         testTask.mustRunAfter(project.tasks.getByName('test'))
                         if (facet.includeInCheckLifecycle) {
@@ -103,7 +105,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
     Test createTestTask(String testName, SourceSet sourceSet) {
         Test task = project.tasks.create(testName, Test)
         task.setGroup(JavaBasePlugin.VERIFICATION_GROUP)
-        task.description("Runs the ${sourceSet.name} tests")
+        task.setDescription("Runs the ${sourceSet.name} tests")
         task.reports.html.setDestination(new File("${project.buildDir}/reports/${sourceSet.name}"))
         task.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
         task.testClassesDirs = sourceSet.output.classesDirs
@@ -118,16 +120,16 @@ class NebulaFacetPlugin implements Plugin<Project> {
     SourceSet createSourceSet(SourceSet parentSourceSet, FacetDefinition set) {
         JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
         SourceSetContainer sourceSets = javaConvention.sourceSets
-        sourceSets.create(set.name) {
-            compileClasspath += parentSourceSet.output
-            compileClasspath += parentSourceSet.compileClasspath
-            runtimeClasspath += it.output + it.compileClasspath
+        sourceSets.create(set.name) { SourceSet sourceSet ->
+            sourceSet.compileClasspath += parentSourceSet.output
+            sourceSet.compileClasspath += parentSourceSet.compileClasspath
+            sourceSet.runtimeClasspath += sourceSet.output + sourceSet.compileClasspath
         }
     }
 
     public <C> NamedContainerProperOrder<C> container(Class<C> type, NamedDomainObjectFactory<C> factory) {
-        Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class);
-        return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory);
+        Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class) as Instantiator
+        return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory)
     }
 
     // TODO React to changes on a FacetDefinition, and re-create source set

@@ -1,5 +1,6 @@
 package nebula.plugin.responsible
 
+import groovy.transform.CompileStatic
 import nebula.plugin.contacts.ContactsPlugin
 import nebula.plugin.dependencylock.DependencyLockPlugin
 import nebula.plugin.info.InfoPlugin
@@ -14,6 +15,7 @@ import org.gradle.api.tasks.testing.Test
 /**
  * Provide a responsible environment for a Gradle plugin.
  */
+@CompileStatic
 class NebulaResponsiblePlugin implements Plugin<Project> {
     protected Project project
 
@@ -38,8 +40,8 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         project.plugins.apply(DependencyLockPlugin)
 
         // TODO Publish javadoc somehow
-        project.tasks.withType(Javadoc) {
-            failOnError = false
+        project.tasks.withType(Javadoc) { Javadoc task ->
+            task.failOnError = false
         }
         project.tasks.withType(Test) { Test testTask ->
             testTask.testLogging.exceptionFormat = 'full'
