@@ -64,7 +64,10 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
                     Configuration parentRuntimeOnly = project.configurations.getByName(parentSourceSet.runtimeOnlyConfigurationName)
                     project.configurations.getByName(sourceSet.runtimeOnlyConfigurationName).extendsFrom(parentRuntimeOnly)
-                    
+
+                    Configuration annotationProcessor = project.configurations.getByName(parentSourceSet.annotationProcessorConfigurationName)
+                    project.configurations.getByName(sourceSet.annotationProcessorConfigurationName).extendsFrom(annotationProcessor)
+
                     // Make sure at the classes get built as part of build
                     project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
 
