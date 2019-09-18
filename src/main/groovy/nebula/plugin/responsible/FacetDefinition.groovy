@@ -1,6 +1,7 @@
 package nebula.plugin.responsible
 
 import groovy.transform.Canonical
+import groovy.transform.CompileStatic
 import org.gradle.api.Named
 
 /**
@@ -9,17 +10,17 @@ import org.gradle.api.Named
  * directory and the prefix for configurations.
  */
 @Canonical
+@CompileStatic
 class FacetDefinition implements Named {
     // TODO Use convention mapping to provide good defaults
-    public FacetDefinition(String name) {
+    FacetDefinition(String name) {
         this.name = name
     }
 
     String name
     String parentSourceSet
 
-    def getParentSourceSet() {
+    String getParentSourceSet() {
         return parentSourceSet ?: 'main'
     }
-
 }
