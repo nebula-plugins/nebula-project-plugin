@@ -6,10 +6,12 @@ import nebula.core.NamedContainerProperOrder
 import nebula.plugin.responsible.ide.EclipsePluginConfigurer
 import nebula.plugin.responsible.ide.IdePluginConfigurer
 import nebula.plugin.responsible.ide.IdeaPluginConfigurer
+import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
@@ -17,6 +19,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.testing.Test
 import org.gradle.internal.reflect.Instantiator
 
@@ -71,14 +74,22 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     project.configurations.getByName(sourceSet.annotationProcessorConfigurationName).extendsFrom(annotationProcessor)
 
                     // Make sure at the classes get built as part of build
-                    project.tasks.getByName('build').dependsOn(sourceSet.classesTaskName)
+                    project.tasks.named('build').configure(new Action<Task>() {
+                        @Override
+                        void execute(Task buildTask) {
+                            buildTask.dependsOn(sourceSet.classesTaskName)
+                        }
+                    })
 
                     if (facet instanceof TestFacetDefinition) {
-                        Test testTask = createTestTask(facet.testTaskName.toString(), sourceSet)
-
-                        testTask.mustRunAfter(project.tasks.getByName('test'))
+                        TaskProvider<Test> testTask = createTestTask(facet.testTaskName.toString(), sourceSet)
                         if (facet.includeInCheckLifecycle) {
-                            project.tasks.getByName('check').dependsOn(testTask)
+                            project.tasks.named('check')configure(new Action<Task>() {
+                                @Override
+                                void execute(Task checkTask) {
+                                    checkTask.dependsOn(testTask)
+                                }
+                            })
                         }
                     }
 
@@ -102,16 +113,24 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @param sourceSet to be used for the integration test task.
      * @return the integration test task, as a Gradle Test object.
      */
-    Test createTestTask(String testName, SourceSet sourceSet) {
-        Test task = project.tasks.create(testName, Test)
-        task.setGroup(JavaBasePlugin.VERIFICATION_GROUP)
-        task.setDescription("Runs the ${sourceSet.name} tests")
-        task.reports.html.setDestination(new File("${project.buildDir}/reports/${sourceSet.name}"))
-        task.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
-        task.testClassesDirs = sourceSet.output.classesDirs
-        task.classpath = sourceSet.runtimeClasspath
-        task
+    TaskProvider<Test> createTestTask(String testName, SourceSet sourceSet) {
+        TaskProvider<Test> testTask = project.tasks.register(testName, Test)
+        testTask.configure(new Action<Test>() {
+            @Override
+            void execute(Test test) {
+                test.setGroup(JavaBasePlugin.VERIFICATION_GROUP)
+                test.setDescription("Runs the ${sourceSet.name} tests")
+                test.reports.html.setDestination(new File("${project.buildDir}/reports/${sourceSet.name}"))
+                test.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
+                test.testClassesDirs = sourceSet.output.classesDirs
+                test.classpath = sourceSet.runtimeClasspath
+                test.mustRunAfter(project.tasks.named('test'))
+            }
+        })
+
+        testTask
     }
+
     /**
      * Based on the JavaPluginConvention, creates a SourceSet for the appropriate to UsableSourceSet.
      *
