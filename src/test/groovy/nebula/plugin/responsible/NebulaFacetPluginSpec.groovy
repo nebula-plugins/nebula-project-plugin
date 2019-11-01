@@ -3,6 +3,7 @@ package nebula.plugin.responsible
 import nebula.test.PluginProjectSpec
 import org.gradle.api.Task
 import org.gradle.api.tasks.SourceSet
+import spock.lang.Ignore
 
 class NebulaFacetPluginSpec extends PluginProjectSpec {
 
@@ -94,33 +95,5 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         compileConf
         compileConf.extendsFrom.any { it.name == 'testCompile'}
 
-    }
-
-    def 'test based facet'() {
-        when:
-        project.apply plugin: 'java'
-        project.apply plugin: NebulaFacetPlugin
-        project.facets {
-            performanceTest
-        }
-
-        then:
-        project.tasks.getByName('performanceTest')
-        project.tasks.getByName('check').dependsOn.any {
-            it instanceof Task && ((Task) it).name == 'performanceTest'
-        }
-
-        when:
-        project.facets {
-            functionalTest {
-                testTaskName = 'functional'
-            }
-        }
-
-        then:
-        project.tasks.getByName('functional')
-        project.tasks.getByName('check').dependsOn.any {
-            it instanceof Task && ((Task) it).name == 'performanceTest'
-        }
     }
 }

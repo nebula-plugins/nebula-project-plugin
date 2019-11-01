@@ -298,4 +298,35 @@ ${applyPlugin(NebulaFacetPlugin)}
 \\--- junit:junit:4.12""")
     }
 
+    def 'test based facet'() {
+        when:
+        MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
+        mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
+
+        buildFile << """
+            apply plugin: 'java'
+            ${applyPlugin(NebulaFacetPlugin)}
+            apply plugin: 'idea'
+
+            facets {
+                functionalTest
+            }
+
+            repositories {
+                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+            }
+
+            dependencies {
+                functionalTestCompile 'foo:bar:2.4'
+                functionalTestRuntime 'custom:baz:5.1.27'
+            }
+        """
+        def result = runTasksSuccessfully('check', '--dry-run')
+
+        then:
+        result.standardOutput.contains(":functionalTest SKIPPED")
+        result.standardOutput.contains(":functionalTestClasses SKIPPED")
+    }
+
+
 }
