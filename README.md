@@ -15,9 +15,9 @@ Provides healthy defaults for a Gradle project. Currently adds:
 
 Compatibilty notes
 ======================
-This plugin uses APIs that are not available on Gradle < 4.0.
+This plugin uses APIs that are not available on Gradle < 5.0.
 
-From v5.0.0, nebula-project-plugin supports only Gradle 4.0+
+From v7.0.0, nebula-project-plugin supports only Gradle 5.0+
 
 Nebula Facet Plugin
 =======================
