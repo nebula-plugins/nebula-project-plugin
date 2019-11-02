@@ -7,7 +7,6 @@ import nebula.plugin.info.InfoPlugin
 import nebula.plugin.publishing.maven.MavenPublishPlugin
 import nebula.plugin.publishing.publications.JavadocJarPlugin
 import nebula.plugin.publishing.publications.SourceJarPlugin
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.javadoc.Javadoc
@@ -41,18 +40,12 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         project.plugins.apply(DependencyLockPlugin)
 
         // TODO Publish javadoc somehow
-        project.tasks.withType(Javadoc).configureEach(new Action<Javadoc>() {
-            @Override
-            void execute(Javadoc javadoc) {
-                javadoc.failOnError = false
-            }
-        })
-        project.tasks.withType(Test).configureEach(new Action<Test>() {
-            @Override
-            void execute(Test test) {
-                test.testLogging.exceptionFormat = 'full'
-            }
-        })
+        project.tasks.withType(Javadoc) { Javadoc task ->
+            task.failOnError = false
+        }
+        project.tasks.withType(Test) { Test testTask ->
+            testTask.testLogging.exceptionFormat = 'full'
+        }
     }
 
     private boolean isBuildingSomething(Project project) {
