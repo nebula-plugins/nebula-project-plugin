@@ -22,6 +22,8 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.testing.Test
 import org.gradle.internal.reflect.Instantiator
+import org.gradle.util.DeprecationLogger
+import org.gradle.internal.Factory
 
 @CompileStatic
 class NebulaFacetPlugin implements Plugin<Project> {
@@ -147,8 +149,13 @@ class NebulaFacetPlugin implements Plugin<Project> {
     }
 
     public <C> NamedContainerProperOrder<C> container(Class<C> type, NamedDomainObjectFactory<C> factory) {
-        Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class) as Instantiator
-        return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory)
+        DeprecationLogger.whileDisabled( new Factory<NamedContainerProperOrder>() {
+            @Override
+            NamedContainerProperOrder create() {
+                Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class) as Instantiator
+                return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory)
+            }
+        })
     }
 
     // TODO React to changes on a FacetDefinition, and re-create source set
