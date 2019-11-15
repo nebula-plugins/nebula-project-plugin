@@ -42,7 +42,6 @@ contacts {
 
 dependencies {
     compile 'com.netflix.nebula:nebula-gradle-interop:1.0.2'
-    compile 'com.netflix.nebula:nebula-core:4.0.1'
     compile 'com.netflix.nebula:nebula-publishing-plugin:9.0.2'
     compile 'com.netflix.nebula:gradle-contacts-plugin:4.0.2'
     compile 'com.netflix.nebula:gradle-dependency-lock-plugin:6.1.2'
