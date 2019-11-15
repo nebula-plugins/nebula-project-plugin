@@ -1,8 +1,7 @@
 package nebula.plugin.responsible
 
-import com.netflix.nebula.interop.GradleKt
 import groovy.transform.CompileStatic
-import nebula.core.NamedContainerProperOrder
+import nebula.plugin.responsible.gradle.NamedContainerProperOrder
 import nebula.plugin.responsible.ide.EclipsePluginConfigurer
 import nebula.plugin.responsible.ide.IdePluginConfigurer
 import nebula.plugin.responsible.ide.IdeaPluginConfigurer
@@ -13,6 +12,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.internal.CollectionCallbackActionDecorator
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPlugin
@@ -86,7 +86,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     if (facet instanceof TestFacetDefinition) {
                         TaskProvider<Test> testTask = createTestTask(facet.testTaskName.toString(), sourceSet)
                         if (facet.includeInCheckLifecycle) {
-                            project.tasks.named('check')configure(new Action<Task>() {
+                            project.tasks.named('check') configure(new Action<Task>() {
                                 @Override
                                 void execute(Task checkTask) {
                                     checkTask.dependsOn(testTask)
@@ -149,13 +149,9 @@ class NebulaFacetPlugin implements Plugin<Project> {
     }
 
     public <C> NamedContainerProperOrder<C> container(Class<C> type, NamedDomainObjectFactory<C> factory) {
-        DeprecationLogger.whileDisabled( new Factory<NamedContainerProperOrder>() {
-            @Override
-            NamedContainerProperOrder create() {
-                Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class) as Instantiator
-                return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory)
-            }
-        })
+        Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class) as Instantiator
+        CollectionCallbackActionDecorator decorator = ((ProjectInternal) project).getServices().get(CollectionCallbackActionDecorator.class) as CollectionCallbackActionDecorator
+        return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory, decorator)
     }
 
     // TODO React to changes on a FacetDefinition, and re-create source set
