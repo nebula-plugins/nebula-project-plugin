@@ -16,7 +16,7 @@
 
 
 plugins {
-    id 'nebula.plugin-plugin' version '13.0.2'
+    id 'nebula.plugin-plugin' version '13.2.0'
 }
 
 description 'Gradle plugin to setup a responsible Gradle project'
