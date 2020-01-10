@@ -1,9 +1,7 @@
 package nebula.plugin.responsible
 
 import nebula.test.PluginProjectSpec
-import org.gradle.api.Task
 import org.gradle.api.tasks.SourceSet
-import spock.lang.Ignore
 
 class NebulaFacetPluginSpec extends PluginProjectSpec {
 
@@ -33,17 +31,19 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
 
         SourceSet integTest = project.sourceSets.find { it.name == 'integTest'}
         integTest
-        integTest.compileConfigurationName == 'integTestCompile'
-        integTest.compileClasspath.files.find { 'src/integTest'}
-        integTest.runtimeConfigurationName == 'integTestRuntime'
+        integTest.compileClasspathConfigurationName == 'integTestCompileClasspath'
+        integTest.compileClasspath.files.find {
+            it.toString().contains('classes/java/main')
+        }
+        integTest.runtimeClasspathConfigurationName == 'integTestRuntimeClasspath'
 
         project.configurations.size() == 28
-        def compileConf = project.configurations.getByName('integTestCompile')
+        def compileConf = project.configurations.getByName('integTestCompileClasspath')
         compileConf
-        compileConf.extendsFrom.any { it.name == 'compile'}
-        def runtimeConf = project.configurations.getByName('integTestRuntime')
+        compileConf.extendsFrom.any { it.name == 'compileClasspath'}
+        def runtimeConf = project.configurations.getByName('integTestRuntimeClasspath')
         runtimeConf
-        runtimeConf.extendsFrom.any { it.name == 'runtime'}
+        runtimeConf.extendsFrom.any { it.name == 'runtimeClasspath'}
     }
 
     def 'create multiple source sets'() {
@@ -91,9 +91,9 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         then:
         project.sourceSets.size() == 3
 
-        def compileConf = project.configurations.getByName('examplesCompile')
+        def compileConf = project.configurations.getByName('examplesCompileClasspath')
         compileConf
-        compileConf.extendsFrom.any { it.name == 'testCompile'}
+        compileConf.extendsFrom.any { it.name == 'testCompileClasspath'}
 
     }
 }
