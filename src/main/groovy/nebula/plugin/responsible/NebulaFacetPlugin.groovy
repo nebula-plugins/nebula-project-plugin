@@ -12,6 +12,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.CollectionCallbackActionDecorator
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
@@ -19,6 +21,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.SourceSetOutput
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.testing.Test
 import org.gradle.internal.reflect.Instantiator
@@ -60,17 +63,11 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     // Since we're using NamedContainerProperOrder, we're configured already.
                     SourceSet sourceSet = createSourceSet(parentSourceSet, facet)
 
-                    Configuration parentCompile = project.configurations.getByName(parentSourceSet.compileConfigurationName)
-                    project.configurations.getByName(sourceSet.compileConfigurationName).extendsFrom(parentCompile)
+                    Configuration parentCompile = project.configurations.getByName(parentSourceSet.compileClasspathConfigurationName)
+                    project.configurations.getByName(sourceSet.compileClasspathConfigurationName).extendsFrom(parentCompile)
 
-                    Configuration parentRuntime = project.configurations.getByName(parentSourceSet.runtimeConfigurationName)
-                    project.configurations.getByName(sourceSet.runtimeConfigurationName).extendsFrom(parentRuntime)
-
-                    Configuration parentImplementation = project.configurations.getByName(parentSourceSet.implementationConfigurationName)
-                    project.configurations.getByName(sourceSet.implementationConfigurationName).extendsFrom(parentImplementation)
-
-                    Configuration parentRuntimeOnly = project.configurations.getByName(parentSourceSet.runtimeOnlyConfigurationName)
-                    project.configurations.getByName(sourceSet.runtimeOnlyConfigurationName).extendsFrom(parentRuntimeOnly)
+                    Configuration parentRuntime = project.configurations.getByName(parentSourceSet.runtimeClasspathConfigurationName)
+                    project.configurations.getByName(sourceSet.runtimeClasspathConfigurationName).extendsFrom(parentRuntime)
 
                     Configuration annotationProcessor = project.configurations.getByName(parentSourceSet.annotationProcessorConfigurationName)
                     project.configurations.getByName(sourceSet.annotationProcessorConfigurationName).extendsFrom(annotationProcessor)
@@ -142,9 +139,25 @@ class NebulaFacetPlugin implements Plugin<Project> {
         JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
         SourceSetContainer sourceSets = javaConvention.sourceSets
         sourceSets.create(set.name) { SourceSet sourceSet ->
+            //our new source set needs to see compiled classes from its parent
             sourceSet.compileClasspath += parentSourceSet.output
-            sourceSet.compileClasspath += parentSourceSet.compileClasspath
-            sourceSet.runtimeClasspath += sourceSet.output + sourceSet.compileClasspath
+            //the parent can be also inheriting so we need to extract all the output from previous parents
+            //e.g smokeTest inherits from test which inherits from main and we need to see classes from main
+            extractAllOutputs(parentSourceSet.compileClasspath).each {
+                sourceSet.compileClasspath += it
+            }
+            //runtime classpath of parent already has parent output so we don't need to explicitly add it
+            extractAllOutputs(parentSourceSet.runtimeClasspath).each {
+                sourceSet.runtimeClasspath += it
+            }
+        }
+    }
+
+    private static Set<SourceSetOutput> extractAllOutputs(FileCollection classpath) {
+        if (classpath instanceof ConfigurableFileCollection) {
+            (classpath as ConfigurableFileCollection).from.findAll { it instanceof SourceSetOutput} as Set<SourceSetOutput>
+        } else {
+            Collections.emptySet()
         }
     }
 
