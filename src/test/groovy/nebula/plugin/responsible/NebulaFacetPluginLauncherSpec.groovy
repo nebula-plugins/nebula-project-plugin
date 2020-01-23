@@ -328,5 +328,140 @@ ${applyPlugin(NebulaFacetPlugin)}
         result.standardOutput.contains(":functionalTestClasses SKIPPED")
     }
 
+    def 'makes sure we can have a parent source set with was created by facet plugin'() {
+        createFile('src/test/resources/application.yml') << """
+spring:
+  application.name: myapp
+logging:
+  level:
+    org.springframework.web: DEBUG 
+"""
+
+        createFile('src/test/resources/bootstrap.yml') << """
+spring:
+  application.name: myapp
+logging:
+  level:
+    org.springframework.web: DEBUG 
+"""
+        createFile('src/main/java/com/netflix/Application.java') << """
+package com.netflix;
+
+import java.util.Arrays;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+    
+    @RestController
+    public class HelloController {
+    
+        @RequestMapping("/")
+        public String index() {
+            return "Greetings from Spring Boot!";
+        }
+    
+    }
+}
+
+"""
+
+
+
+        createFile('src/specializedSmokeTest/java/com/netflix/HelloTest.java') << """
+package com.netflix;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
+import java.net.URL;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class HelloTest {
+   @LocalServerPort
+    private int port;
+
+    private URL base;
+
+    @Autowired
+    private TestRestTemplate template;
+
+    @Before
+    public void setUp() throws Exception {
+        this.base = new URL("http://localhost:" + port + "/");
+    }
+
+    @Test
+    public void getHello() throws Exception {
+        ResponseEntity<String> response = template.getForEntity(base.toString(),
+                String.class);
+        assertThat(response.getBody(), equalTo("Greetings from Spring Boot!"));
+    } 
+}
+        """
+
+
+        buildFile << """
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+${applyPlugin(NebulaFacetPlugin)}
+
+            repositories {
+                mavenCentral() 
+            }
+
+            dependencies {
+                implementation("org.springframework.boot:spring-boot-starter-web")
+                testImplementation("org.springframework.boot:spring-boot-starter-test")
+                testImplementation("junit:junit")
+            }
+            facets {
+                smokeTest {
+                    parentSourceSet = 'test'
+                }
+                specializedSmokeTest {
+                    parentSourceSet = 'smokeTest'
+                }
+            }
+        """
+
+        when:
+        def result = runTasksSuccessfully( 'specializedSmokeTest' )
+
+        then:
+        result.wasExecuted(':specializedSmokeTest')
+    }
 
 }
