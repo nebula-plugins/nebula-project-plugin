@@ -140,24 +140,26 @@ class NebulaFacetPlugin implements Plugin<Project> {
         SourceSetContainer sourceSets = javaConvention.sourceSets
         sourceSets.create(set.name) { SourceSet sourceSet ->
             //our new source set needs to see compiled classes from its parent
-            sourceSet.compileClasspath += parentSourceSet.output
             //the parent can be also inheriting so we need to extract all the output from previous parents
             //e.g smokeTest inherits from test which inherits from main and we need to see classes from main
-            extractAllOutputs(parentSourceSet.compileClasspath).each {
-                sourceSet.compileClasspath += it
-            }
+            Set<Object> compileClasspath = extractAllOutputs(parentSourceSet.compileClasspath)
+            compileClasspath.add(parentSourceSet.output)
+            compileClasspath.add(sourceSet.compileClasspath)
+            //we are using from to create ConfigurableFileCollection so if we keep inhering from created facets we can
+            //still extract chain of output from all parents
+            sourceSet.compileClasspath = project.objects.fileCollection().from(compileClasspath as Object[])
             //runtime classpath of parent already has parent output so we don't need to explicitly add it
-            extractAllOutputs(parentSourceSet.runtimeClasspath).each {
-                sourceSet.runtimeClasspath += it
-            }
+            Set<Object> runtimeClasspath = extractAllOutputs(parentSourceSet.runtimeClasspath)
+            runtimeClasspath.add(sourceSet.runtimeClasspath)
+            sourceSet.runtimeClasspath = project.objects.fileCollection().from(runtimeClasspath as Object[])
         }
     }
 
-    private static Set<SourceSetOutput> extractAllOutputs(FileCollection classpath) {
+    private static Set<Object> extractAllOutputs(FileCollection classpath) {
         if (classpath instanceof ConfigurableFileCollection) {
-            (classpath as ConfigurableFileCollection).from.findAll { it instanceof SourceSetOutput} as Set<SourceSetOutput>
+            (classpath as ConfigurableFileCollection).from.findAll { it instanceof SourceSetOutput} as Set<Object>
         } else {
-            Collections.emptySet()
+            new HashSet<Object>()
         }
     }
 
