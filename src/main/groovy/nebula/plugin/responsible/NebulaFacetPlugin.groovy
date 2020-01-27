@@ -15,6 +15,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.CollectionCallbackActionDecorator
+import org.gradle.api.internal.file.UnionFileCollection
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPlugin
@@ -157,8 +158,15 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
     private static Set<Object> extractAllOutputs(FileCollection classpath) {
         if (classpath instanceof ConfigurableFileCollection) {
-            (classpath as ConfigurableFileCollection).from.findAll { it instanceof SourceSetOutput} as Set<Object>
-        } else {
+            (classpath as ConfigurableFileCollection).from.findAll {it instanceof FileCollection }. collectMany { extractAllOutputs(it as FileCollection) } as Set<Object>
+        }
+        else if (classpath instanceof UnionFileCollection) {
+            (classpath as UnionFileCollection).sources.collectMany { extractAllOutputs(it) } as Set<Object>
+        }
+        else if (classpath instanceof SourceSetOutput) {
+            [classpath] as Set<Object>
+        }
+        else {
             new HashSet<Object>()
         }
     }

@@ -464,4 +464,49 @@ ${applyPlugin(NebulaFacetPlugin)}
         result.wasExecuted(':specializedSmokeTest')
     }
 
+    def 'facet plugin properly consumes parents source sets outputs when groovy plugin is used'() {
+        given:
+        buildFile << """
+            apply plugin: 'groovy'
+            ${applyPlugin(NebulaFacetPlugin)}
+
+            repositories {
+                mavenCentral()
+            }
+
+            facets {
+                functionalTest
+            }
+
+            dependencies {
+                implementation('org.codehaus.groovy:groovy-all:2.5.9')
+                testImplementation("junit:junit:4.12")
+            }
+        """
+
+        writeJavaSourceFile("""
+            public class Main {
+                public String test() {
+                    return "Some string";
+                }
+            }
+        """, "src/main/groovy")
+
+        writeJavaSourceFile("""
+            import org.junit.Test;
+
+            public class MainTest {
+                @Test
+                public void test() {
+                    new Main().test();
+                }
+            }
+        """, "src/functionalTest/groovy")
+
+        when:
+        def result = runTasksSuccessfully("functionalTest")
+
+        then:
+        result.wasExecuted("functionalTest")
+    }
 }
