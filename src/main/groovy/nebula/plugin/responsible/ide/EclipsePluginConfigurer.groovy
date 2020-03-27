@@ -44,8 +44,8 @@ class EclipsePluginConfigurer implements IdePluginConfigurer {
      */
     private void configurePluginForSourceSet(SourceSet sourceSet) {
         withEclipseModel { EclipseModel model ->
-            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.compileConfigurationName) ]
-            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.runtimeConfigurationName) ]
+            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.compileClasspathConfigurationName) ]
+            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.runtimeClasspathConfigurationName) ]
         }
     }
 
@@ -56,8 +56,8 @@ class EclipsePluginConfigurer implements IdePluginConfigurer {
      */
     private void configurePluginForTestSourceSet(SourceSet sourceSet) {
         withEclipseModel { EclipseModel model ->
-            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.compileConfigurationName) ]
-            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.runtimeConfigurationName) ]
+            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.compileClasspathConfigurationName) ]
+            model.classpath.plusConfigurations += [ getConfiguration(sourceSet.runtimeClasspathConfigurationName) ]
         }
     }
 

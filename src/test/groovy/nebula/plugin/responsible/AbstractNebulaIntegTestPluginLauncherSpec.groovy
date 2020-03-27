@@ -26,7 +26,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
             }
 
             dependencies {
-                testCompile 'junit:junit:latest.release'
+                testImplementation 'junit:junit:latest.release'
             }
         """
     }
@@ -76,8 +76,8 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
             }
 
             dependencies {
-                integTestCompile 'foo:bar:2.4'
-                integTestRuntime 'custom:baz:5.1.27'
+                integTestImplementation 'foo:bar:2.4'
+                integTestRuntimeOnly 'custom:baz:5.1.27'
             }
         """
 
