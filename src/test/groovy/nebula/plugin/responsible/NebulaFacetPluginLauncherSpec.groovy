@@ -40,8 +40,8 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
             }
 
             dependencies {
-                functionalTestCompile 'foo:bar:2.4'
-                functionalTestRuntime 'custom:baz:5.1.27'
+                functionalTestImplementation 'foo:bar:2.4'
+                functionalTestRuntimeOnly 'custom:baz:5.1.27'
             }
         """
 
@@ -80,8 +80,8 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
             }
 
             dependencies {
-                myCustomCompile 'foo:bar:2.4'
-                myCustomRuntime 'custom:baz:5.1.27'
+                myCustomImplementation 'foo:bar:2.4'
+                myCustomRuntimeOnly 'custom:baz:5.1.27'
             }
         """
 
@@ -121,8 +121,8 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
             }
 
             dependencies {
-                myCustomCompile 'foo:bar:2.4'
-                myCustomRuntime 'custom:baz:5.1.27'
+                myCustomImplementation 'foo:bar:2.4'
+                myCustomRuntimeOnly 'custom:baz:5.1.27'
             }
         """
 
@@ -317,8 +317,8 @@ ${applyPlugin(NebulaFacetPlugin)}
             }
 
             dependencies {
-                functionalTestCompile 'foo:bar:2.4'
-                functionalTestRuntime 'custom:baz:5.1.27'
+                functionalTestImplementation 'foo:bar:2.4'
+                functionalTestRuntimeOnly 'custom:baz:5.1.27'
             }
         """
         def result = runTasksSuccessfully('check', '--dry-run')

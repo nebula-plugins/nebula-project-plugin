@@ -46,7 +46,7 @@ dependencies {
     compile 'com.netflix.nebula:gradle-contacts-plugin:4.0.2'
     compile 'com.netflix.nebula:gradle-dependency-lock-plugin:6.1.2'
     compile 'com.netflix.nebula:gradle-info-plugin:4.0.2'
-    testCompile 'com.netflix.nebula:nebula-test:7.1.7'
+    testImplementation 'com.netflix.nebula:nebula-test:7.1.7'
 }
 
 // We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file
