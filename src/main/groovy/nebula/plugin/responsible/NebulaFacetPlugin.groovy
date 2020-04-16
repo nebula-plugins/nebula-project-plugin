@@ -26,8 +26,6 @@ import org.gradle.api.tasks.SourceSetOutput
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.testing.Test
 import org.gradle.internal.reflect.Instantiator
-import org.gradle.util.DeprecationLogger
-import org.gradle.internal.Factory
 
 @CompileStatic
 class NebulaFacetPlugin implements Plugin<Project> {
@@ -143,15 +141,19 @@ class NebulaFacetPlugin implements Plugin<Project> {
             //our new source set needs to see compiled classes from its parent
             //the parent can be also inheriting so we need to extract all the output from previous parents
             //e.g smokeTest inherits from test which inherits from main and we need to see classes from main
-            Set<Object> compileClasspath = extractAllOutputs(parentSourceSet.compileClasspath)
-            compileClasspath.add(parentSourceSet.output)
+            Set<Object> compileClasspath = new LinkedHashSet<Object>()
             compileClasspath.add(sourceSet.compileClasspath)
+            compileClasspath.add(parentSourceSet.output)
+            compileClasspath.addAll(extractAllOutputs(parentSourceSet.compileClasspath))
+
             //we are using from to create ConfigurableFileCollection so if we keep inhering from created facets we can
             //still extract chain of output from all parents
             sourceSet.compileClasspath = project.objects.fileCollection().from(compileClasspath as Object[])
             //runtime classpath of parent already has parent output so we don't need to explicitly add it
-            Set<Object> runtimeClasspath = extractAllOutputs(parentSourceSet.runtimeClasspath)
+            Set<Object> runtimeClasspath = new LinkedHashSet<Object>()
             runtimeClasspath.add(sourceSet.runtimeClasspath)
+            runtimeClasspath.addAll(extractAllOutputs(parentSourceSet.runtimeClasspath))
+
             sourceSet.runtimeClasspath = project.objects.fileCollection().from(runtimeClasspath as Object[])
         }
     }
@@ -167,7 +169,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
             [classpath] as Set<Object>
         }
         else {
-            new HashSet<Object>()
+            new LinkedHashSet<Object>()
         }
     }
 
