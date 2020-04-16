@@ -509,4 +509,88 @@ ${applyPlugin(NebulaFacetPlugin)}
         then:
         result.wasExecuted("functionalTest")
     }
+
+    def 'current facets resources are read first before parent source sets'() {
+        given:
+        buildFile << """
+            apply plugin: 'groovy'
+            ${applyPlugin(NebulaFacetPlugin)}
+
+            repositories {
+                mavenCentral()
+            }
+
+            facets {
+                functionalTest {
+                    parentSourceSet = 'test'
+                }
+            }
+
+            dependencies {
+                testImplementation("junit:junit:4.12")
+            }
+            
+            project.tasks.withType(Test) {
+                afterTest { descriptor ->
+                    logger.lifecycle("Running test: " + descriptor)
+                }
+            }
+            
+        """
+
+        writeJavaSourceFile("""
+            import java.util.Properties;
+            import java.io.IOException;
+
+            public class MyClass {
+                public int readProp() throws IOException {
+                    Properties properties = new Properties();
+                    properties.load(this.getClass().getResourceAsStream("/foo.properties"));
+                    return Integer.parseInt(properties.getProperty("myprop"));
+                }
+            }
+
+        """, "src/main/java")
+        addResource("src/main/resources", "foo.properties", "myprop=2")
+
+
+        writeJavaSourceFile("""
+            import org.junit.Test;
+            import java.io.IOException;
+            import static org.junit.Assert.*;
+
+            public class MyClassTest {
+                
+                @Test
+                public void test() throws IOException {
+                    assertEquals(3, new MyClass().readProp());
+                }
+            }
+        """, "src/test/java")
+        addResource("src/test/resources", "foo.properties", "myprop=3")
+
+        writeJavaSourceFile("""
+            import org.junit.Test;
+            import java.io.IOException;
+            import static org.junit.Assert.*;
+
+            public class MyClassFunctionalTest {
+            
+                @Test
+                public void test() throws IOException {
+                    assertEquals(4, new MyClass().readProp());
+                }
+            }
+        """, "src/functionalTest/java")
+        addResource("src/functionalTest/resources", "foo.properties", "myprop=4")
+
+        when:
+        def result = runTasksSuccessfully("check")
+
+        then:
+        result.standardOutput.contains("Running test: Test test(MyClassTest)")
+        result.standardOutput.contains("Running test: Test test(MyClassFunctionalTest)")
+        result.wasExecuted("test")
+        result.wasExecuted("functionalTest")
+    }
 }
