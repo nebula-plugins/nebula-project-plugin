@@ -21,7 +21,7 @@ From v7.0.0, nebula-project-plugin supports only Gradle 5.0+
 
 Nebula Facet Plugin
 =======================
-A routine pattern is wanting a new SourceSet with an accompanying Configuration for dependencies. We consider this another facet of your project and can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequently it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
+A routine pattern is wanting a new [SourceSet](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.SourceSet.html) with an accompanying [Configuration](https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.Configuration.html) for dependencies. We consider this another facet of your project and can be modeled via the Nebula Facet plugin. This plugin will create a SourceSet with the name provided, which extends the main SourceSet, and consequently it'll create configurations for compile and runtime, which extends from the parent SourceSet. Their "classes" task will be wired up to the build task. 
 
 ```groovy
 apply plugin: 'nebula.facet'
@@ -31,7 +31,7 @@ facets {
 }
 ```
 
-The previous definition would make examples and performance SourceSets, so that code can go in src/examples/java and src/performance/java. It'll get four configurations: examplesCompile, examplesRuntime, performanceCompile, performanceRuntime. Those configuration will extends compile and runtime respectively. Each one can be configured to inherit from another SourceSet, e.g.
+The previous definition would make examples and performance SourceSets, so that code can go in `src/examples/java` and `src/performance/java`. It'll get four configurations: `examplesCompile`, `examplesRuntime`, `performanceCompile`, `performanceRuntime`. Those configurations will extend compile and runtime respectively. Each one can be configured to inherit from another SourceSet, e.g.
 
 ```groovy
 facets {
@@ -41,12 +41,12 @@ facets {
 }
 ```
 
-That will cause the functionalCompile to extend from testCompile, and functionalRuntime to extend from testRuntime, since those are the configurations from the "test" SourceSet.  
+That will cause the `functionalCompile` to extend from `testCompile`, and `functionalRuntime` to extend from `testRuntime`, since those are the configurations from the "test" SourceSet.  
 
 Test Facets
 --------------
 
-If "Test" is in the facet name, then a Test task would be created (though it'll still inherit from the "main" SourceSet, use the above configuration to make the test facet extends from the test SourceSet). For example:
+If "Test" is in the facet name then a Test task will be created (though it will still inherit from the "main" SourceSet--use the above configuration to make the test facet extends from the test SourceSet). For example:
 
 ```groovy
 facets {
@@ -54,7 +54,7 @@ facets {
 }
 ```
 
-This will create a test task called integTest in addition to the integTest SourceSet. The parent SourceSet can still be overriden like above, and the task name can be set:
+This will create a test task called `integTest` in addition to the `integTest` SourceSet. The parent SourceSet can still be overriden like above, and the task name can be set:
 
 ```groovy
 facets {
