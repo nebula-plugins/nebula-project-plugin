@@ -138,6 +138,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
         JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
         SourceSetContainer sourceSets = javaConvention.sourceSets
         sourceSets.create(set.name) { SourceSet sourceSet ->
+            sourceSet.
             //our new source set needs to see compiled classes from its parent
             //the parent can be also inheriting so we need to extract all the output from previous parents
             //e.g smokeTest inherits from test which inherits from main and we need to see classes from main
