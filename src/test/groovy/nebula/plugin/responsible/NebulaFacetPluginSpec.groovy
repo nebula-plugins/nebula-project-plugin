@@ -2,6 +2,7 @@ package nebula.plugin.responsible
 
 import nebula.test.PluginProjectSpec
 import org.gradle.api.tasks.SourceSet
+import org.gradle.util.GradleVersion
 
 class NebulaFacetPluginSpec extends PluginProjectSpec {
 
@@ -37,7 +38,13 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         }
         integTest.runtimeClasspathConfigurationName == 'integTestRuntimeClasspath'
 
-        project.configurations.size() == 28
+        if (GradleVersion.current().baseVersion < GradleVersion.version("7.0").baseVersion) {
+            assert project.configurations.size() == 28
+        } else {
+            // Gradle 7.+ removes the following configurations: compile, runtime, testCompile, testRuntime, integTestCompile, integTestRuntime
+            assert project.configurations.size() == 22
+        }
+
         def compileConf = project.configurations.getByName('integTestCompileClasspath')
         compileConf
         compileConf.extendsFrom.any { it.name == 'compileClasspath'}
