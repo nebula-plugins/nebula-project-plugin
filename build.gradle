@@ -42,12 +42,13 @@ contacts {
 }
 
 dependencies {
-    implementation 'com.netflix.nebula:nebula-gradle-interop:1.0.2'
-    implementation 'com.netflix.nebula:nebula-publishing-plugin:9.0.2'
-    implementation 'com.netflix.nebula:gradle-contacts-plugin:4.0.2'
-    implementation 'com.netflix.nebula:gradle-dependency-lock-plugin:6.1.2'
-    implementation 'com.netflix.nebula:gradle-info-plugin:4.0.2'
-    testImplementation 'com.netflix.nebula:nebula-test:7.1.7'
+    implementation 'com.netflix.nebula:nebula-gradle-interop:1.0.11'
+    implementation 'com.netflix.nebula:nebula-publishing-plugin:17.3.2'
+    implementation 'com.netflix.nebula:gradle-contacts-plugin:5.1.0'
+    implementation 'com.netflix.nebula:gradle-dependency-lock-plugin:11.1.2'
+    implementation 'com.netflix.nebula:gradle-info-plugin:9.1.2'
+
+    testImplementation 'com.netflix.nebula:nebula-test:7.10.1'
 }
 
 // We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file
