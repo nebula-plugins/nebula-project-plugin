@@ -16,7 +16,7 @@
 
 
 plugins {
-    id 'nebula.plugin-plugin' version '15.2.1'
+    id 'nebula.plugin-plugin' version '15.4.1'
     id 'java-library'
 }
 
@@ -35,8 +35,6 @@ dependencies {
     implementation 'com.netflix.nebula:gradle-contacts-plugin:5.1.0'
     implementation 'com.netflix.nebula:gradle-dependency-lock-plugin:11.1.2'
     implementation 'com.netflix.nebula:gradle-info-plugin:9.1.2'
-
-    testImplementation 'com.netflix.nebula:nebula-test:7.10.1'
 }
 
 // We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file

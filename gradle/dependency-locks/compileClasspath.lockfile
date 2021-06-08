@@ -1,0 +1,13 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.netflix.nebula:gradle-contacts-plugin:5.1.0
+com.netflix.nebula:gradle-dependency-lock-plugin:11.1.2
+com.netflix.nebula:gradle-info-plugin:9.1.2
+com.netflix.nebula:nebula-gradle-interop:1.0.11
+com.netflix.nebula:nebula-publishing-plugin:17.3.2
+org.jetbrains.kotlin:kotlin-stdlib-common:1.4.10
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10
+org.jetbrains.kotlin:kotlin-stdlib:1.4.10
+org.jetbrains:annotations:13.0
