@@ -12,6 +12,10 @@ Provides healthy defaults for a Gradle project. Currently adds:
 * Easy specification of people involved in a project via gradle-contacts-plugin
 * Doesn't fail javadoc if there are none found
 
+`nebula-project` plugin introduces [Nebula Dependency Lock Plugin](https://github.com/nebula-plugins/gradle-dependency-lock-plugin) out of the box.
+
+If you prefer to use [Gradle's Locking dependency versions mechanism](https://docs.gradle.org/current/userguide/dependency_locking.html), you can use `nebula.dependencyLockPluginEnable` project property to disable Nebula's plugin. 
+
 Compatibilty notes
 ======================
 This plugin uses APIs that are not available on Gradle < 5.0.
