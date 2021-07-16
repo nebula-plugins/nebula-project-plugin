@@ -18,6 +18,7 @@ import org.gradle.api.tasks.testing.Test
  */
 @CompileStatic
 class NebulaResponsiblePlugin implements Plugin<Project> {
+    private static final String DEPENDENCY_LOCK_PLUGIN_ENABLED = 'nebula.dependencyLockPluginEnabled'
     protected Project project
 
     @Override
@@ -38,7 +39,10 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         project.plugins.apply(ContactsPlugin)
 
         // Dependency Locking
-        project.plugins.apply(DependencyLockPlugin)
+        def nebulaDependencyLockPluginEnabled = project.hasProperty(DEPENDENCY_LOCK_PLUGIN_ENABLED) ? Boolean.valueOf(project.property(DEPENDENCY_LOCK_PLUGIN_ENABLED) as String) : true
+        if(nebulaDependencyLockPluginEnabled) {
+            project.plugins.apply(DependencyLockPlugin)
+        }
 
         // TODO Publish javadoc somehow
         project.tasks.withType(Javadoc).configureEach(new Action<Javadoc>() {
