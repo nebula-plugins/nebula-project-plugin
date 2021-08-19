@@ -122,7 +122,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
                 test.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
                 test.testClassesDirs = sourceSet.output.classesDirs
                 test.classpath = sourceSet.runtimeClasspath
-                test.mustRunAfter(project.tasks.named('test'))
+                test.shouldRunAfter(project.tasks.named('test'))
             }
         })
 
