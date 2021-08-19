@@ -5,16 +5,12 @@ import nebula.plugin.responsible.gradle.NamedContainerProperOrder
 import nebula.plugin.responsible.ide.EclipsePluginConfigurer
 import nebula.plugin.responsible.ide.IdePluginConfigurer
 import nebula.plugin.responsible.ide.IdeaPluginConfigurer
-import org.gradle.api.Action
-import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.api.NamedDomainObjectFactory
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.api.Task
+import org.gradle.api.*
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.CollectionCallbackActionDecorator
+import org.gradle.api.internal.StartParameterInternal
 import org.gradle.api.internal.file.UnionFileCollection
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
@@ -122,7 +118,14 @@ class NebulaFacetPlugin implements Plugin<Project> {
                 test.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
                 test.testClassesDirs = sourceSet.output.classesDirs
                 test.classpath = sourceSet.runtimeClasspath
-                test.mustRunAfter(project.tasks.named('test'))
+                /*
+                 * Configuration caching enables parallel execution within a project so we don't need to be as concerned
+                 * about task order impacting the speed of test feedback.
+                 */
+                StartParameterInternal startParameter = project.gradle.startParameter as StartParameterInternal
+                if (!(startParameter.isParallelProjectExecutionEnabled() && startParameter.maxWorkerCount > 1 && startParameter.isConfigurationCache())) {
+                    test.mustRunAfter(project.tasks.named('test'))
+                }
             }
         })
 
@@ -160,15 +163,12 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
     private static Set<Object> extractAllOutputs(FileCollection classpath) {
         if (classpath instanceof ConfigurableFileCollection) {
-            (classpath as ConfigurableFileCollection).from.findAll {it instanceof FileCollection }. collectMany { extractAllOutputs(it as FileCollection) } as Set<Object>
-        }
-        else if (classpath instanceof UnionFileCollection) {
+            (classpath as ConfigurableFileCollection).from.findAll { it instanceof FileCollection }.collectMany { extractAllOutputs(it as FileCollection) } as Set<Object>
+        } else if (classpath instanceof UnionFileCollection) {
             (classpath as UnionFileCollection).sources.collectMany { extractAllOutputs(it) } as Set<Object>
-        }
-        else if (classpath instanceof SourceSetOutput) {
+        } else if (classpath instanceof SourceSetOutput) {
             [classpath] as Set<Object>
-        }
-        else {
+        } else {
             new LinkedHashSet<Object>()
         }
     }
