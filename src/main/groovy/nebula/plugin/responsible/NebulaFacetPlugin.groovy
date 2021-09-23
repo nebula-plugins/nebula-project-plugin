@@ -12,13 +12,17 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.CollectionCallbackActionDecorator
+import org.gradle.api.internal.file.UnionFileCollection
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.SourceSetOutput
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.testing.Test
 import org.gradle.internal.reflect.Instantiator
@@ -140,7 +144,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
             Set<Object> compileClasspath = new LinkedHashSet<Object>()
             compileClasspath.add(sourceSet.compileClasspath)
             compileClasspath.add(parentSourceSet.output)
-            compileClasspath.add(parentSourceSet.compileClasspath)
+            compileClasspath.addAll(extractAllOutputs(parentSourceSet.compileClasspath))
 
             //we are using from to create ConfigurableFileCollection so if we keep inhering from created facets we can
             //still extract chain of output from all parents
@@ -148,12 +152,26 @@ class NebulaFacetPlugin implements Plugin<Project> {
             //runtime classpath of parent already has parent output so we don't need to explicitly add it
             Set<Object> runtimeClasspath = new LinkedHashSet<Object>()
             runtimeClasspath.add(sourceSet.runtimeClasspath)
-            runtimeClasspath.add(parentSourceSet.runtimeClasspath)
+            runtimeClasspath.addAll(extractAllOutputs(parentSourceSet.runtimeClasspath))
 
             sourceSet.runtimeClasspath = project.objects.fileCollection().from(runtimeClasspath as Object[])
         }
     }
 
+    private static Set<Object> extractAllOutputs(FileCollection classpath) {
+        if (classpath instanceof ConfigurableFileCollection) {
+            (classpath as ConfigurableFileCollection).from.findAll {it instanceof FileCollection }. collectMany { extractAllOutputs(it as FileCollection) } as Set<Object>
+        }
+        else if (classpath instanceof UnionFileCollection) {
+            (classpath as UnionFileCollection).sources.collectMany { extractAllOutputs(it) } as Set<Object>
+        }
+        else if (classpath instanceof SourceSetOutput) {
+            [classpath] as Set<Object>
+        }
+        else {
+            new LinkedHashSet<Object>()
+        }
+    }
 
     public <C> NamedContainerProperOrder<C> container(Class<C> type, NamedDomainObjectFactory<C> factory) {
         Instantiator instantiator = ((ProjectInternal) project).getServices().get(Instantiator.class) as Instantiator
