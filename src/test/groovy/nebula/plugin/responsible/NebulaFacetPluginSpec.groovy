@@ -45,12 +45,12 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
             assert project.configurations.size() == 22
         }
 
-        def compileConf = project.configurations.getByName('integTestCompileClasspath')
-        compileConf
-        compileConf.extendsFrom.any { it.name == 'compileClasspath'}
-        def runtimeConf = project.configurations.getByName('integTestRuntimeClasspath')
-        runtimeConf
-        runtimeConf.extendsFrom.any { it.name == 'runtimeClasspath'}
+        def integTestImplementationConf = project.configurations.getByName('integTestImplementation')
+        integTestImplementationConf
+        integTestImplementationConf.extendsFrom.any { it.name == 'implementation'}
+        def integTestRuntimeOnlyConf = project.configurations.getByName('integTestRuntimeOnly')
+        integTestRuntimeOnlyConf
+        integTestRuntimeOnlyConf.extendsFrom.any { it.name == 'runtimeOnly'}
     }
 
     def 'create multiple source sets'() {
@@ -98,9 +98,9 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         then:
         project.sourceSets.size() == 3
 
-        def compileConf = project.configurations.getByName('examplesCompileClasspath')
-        compileConf
-        compileConf.extendsFrom.any { it.name == 'testCompileClasspath'}
+        def examplesImplementationConf = project.configurations.getByName('examplesImplementation')
+        examplesImplementationConf
+        examplesImplementationConf.extendsFrom.any { it.name == 'testImplementation'}
 
     }
 }
