@@ -28,6 +28,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
     private static final String IMPLEMENTATION_CONFIG_NAME = 'implementation'
     private static final String API_CONFIG_NAME = 'api'
+    private static final String COMPILE_CONFIG_NAME = 'compile'
     private static final String MAIN_SOURCE_SET_NAME = 'main'
 
     Project project
@@ -160,7 +161,10 @@ class NebulaFacetPlugin implements Plugin<Project> {
     private void addParentSourceSetOutputs( Set<Object> classpath, SourceSet parentSourceSet, SourceSetContainer sourceSets) {
         classpath.add(parentSourceSet.output)
         Configuration parentSourceSetImplementationConfiguration = project.configurations.findByName(parentSourceSet.implementationConfigurationName)
-        if(!parentSourceSetImplementationConfiguration || !parentSourceSetImplementationConfiguration.extendsFrom || parentSourceSetImplementationConfiguration.extendsFrom.every { it.name == API_CONFIG_NAME }) {
+        if(!parentSourceSetImplementationConfiguration ||
+                !parentSourceSetImplementationConfiguration.extendsFrom ||
+                parentSourceSetImplementationConfiguration.extendsFrom.any { it.name in [API_CONFIG_NAME, COMPILE_CONFIG_NAME ] }
+        ) {
             return
         }
 
