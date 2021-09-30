@@ -168,7 +168,10 @@ class NebulaFacetPlugin implements Plugin<Project> {
             return
         }
 
-        Configuration extendsFrom = parentSourceSetImplementationConfiguration.extendsFrom.find()
+        Configuration extendsFrom = parentSourceSetImplementationConfiguration.extendsFrom.find { it.name.toLowerCase().contains(IMPLEMENTATION_CONFIG_NAME)}
+        if(!extendsFrom) {
+            return
+        }
         if(extendsFrom.name == IMPLEMENTATION_CONFIG_NAME) {
             addParentSourceSetOutputs(classpath, sourceSets.getByName(MAIN_SOURCE_SET_NAME), sourceSets)
         } else if(extendsFrom.name.toLowerCase().contains(IMPLEMENTATION_CONFIG_NAME)) {
