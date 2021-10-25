@@ -479,7 +479,7 @@ ${applyPlugin(NebulaFacetPlugin)}
             }
 
             dependencies {
-                implementation('org.codehaus.groovy:groovy-all:2.5.9')
+                implementation('org.codehaus.groovy:groovy-all:3.0.9')
                 testImplementation("junit:junit:4.12")
             }
         """
