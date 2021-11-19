@@ -16,7 +16,7 @@ import org.gradle.api.internal.CollectionCallbackActionDecorator
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
@@ -56,8 +56,8 @@ class NebulaFacetPlugin implements Plugin<Project> {
             // Might have to perform this in afterEvaluate
             project.plugins.withType(JavaBasePlugin) {
 
-                JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
-                SourceSetContainer sourceSets = javaConvention.sourceSets
+                JavaPluginExtension javaPluginExtension = project.extensions.getByType(JavaPluginExtension)
+                SourceSetContainer sourceSets = javaPluginExtension.sourceSets
                 sourceSets.matching { SourceSet sourceSet -> sourceSet.name == facet.parentSourceSet }.all { SourceSet parentSourceSet ->
 
                     // Since we're using NamedContainerProperOrder, we're configured already.
@@ -136,8 +136,8 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @return the new SourceSet
      */
     SourceSet createSourceSet(SourceSet parentSourceSet, FacetDefinition set) {
-        JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
-        SourceSetContainer sourceSets = javaConvention.sourceSets
+        JavaPluginExtension javaPluginExtension = project.extensions.getByType(JavaPluginExtension)
+        SourceSetContainer sourceSets = javaPluginExtension.sourceSets
         sourceSets.create(set.name) { SourceSet sourceSet ->
             //our new source set needs to see compiled classes from its parent
             //the parent can be also inheriting so we need to extract all the output from previous parents
