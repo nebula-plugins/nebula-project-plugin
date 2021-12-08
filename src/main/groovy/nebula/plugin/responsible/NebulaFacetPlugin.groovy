@@ -56,8 +56,8 @@ class NebulaFacetPlugin implements Plugin<Project> {
             // Might have to perform this in afterEvaluate
             project.plugins.withType(JavaBasePlugin) {
 
-                JavaPluginExtension javaPluginExtension = project.extensions.getByType(JavaPluginExtension)
-                SourceSetContainer sourceSets = javaPluginExtension.sourceSets
+
+                SourceSetContainer sourceSets = SourceSetUtils.getSourceSets(project)
                 sourceSets.matching { SourceSet sourceSet -> sourceSet.name == facet.parentSourceSet }.all { SourceSet parentSourceSet ->
 
                     // Since we're using NamedContainerProperOrder, we're configured already.
@@ -136,8 +136,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @return the new SourceSet
      */
     SourceSet createSourceSet(SourceSet parentSourceSet, FacetDefinition set) {
-        JavaPluginExtension javaPluginExtension = project.extensions.getByType(JavaPluginExtension)
-        SourceSetContainer sourceSets = javaPluginExtension.sourceSets
+        SourceSetContainer sourceSets = SourceSetUtils.getSourceSets(project)
         sourceSets.create(set.name) { SourceSet sourceSet ->
             //our new source set needs to see compiled classes from its parent
             //the parent can be also inheriting so we need to extract all the output from previous parents
