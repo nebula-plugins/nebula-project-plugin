@@ -298,6 +298,36 @@ ${applyPlugin(NebulaFacetPlugin)}
 \\--- junit:junit:4.12""")
     }
 
+    def 'makes sure we can extend compileOnly configurations'() {
+        buildFile << """
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+${applyPlugin(NebulaFacetPlugin)}
+
+            repositories {
+                mavenCentral() 
+            }
+
+            dependencies {
+                compileOnly("junit:junit:4.12")
+            }
+            facets {
+                smokeTest
+            }
+        """
+
+        when:
+        def result = runTasksSuccessfully( 'dependencies', '--configuration', 'smokeTestCompileClasspath' )
+
+        then:
+        result.standardOutput.contains("\\--- junit:junit:4.12")
+    }
+
     def 'test based facet'() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
