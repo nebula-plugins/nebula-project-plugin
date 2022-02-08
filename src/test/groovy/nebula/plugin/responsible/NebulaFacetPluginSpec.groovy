@@ -38,12 +38,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         }
         integTest.runtimeClasspathConfigurationName == 'integTestRuntimeClasspath'
 
-        if (GradleVersion.current().baseVersion < GradleVersion.version("7.0").baseVersion) {
-            assert project.configurations.size() == 28
-        } else {
-            // Gradle 7.+ removes the following configurations: compile, runtime, testCompile, testRuntime, integTestCompile, integTestRuntime
-            assert project.configurations.size() == 22
-        }
+        assert project.configurations.size() == 24
 
         def integTestImplementationConf = project.configurations.getByName('integTestImplementation')
         integTestImplementationConf
