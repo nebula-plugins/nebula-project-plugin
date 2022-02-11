@@ -5,6 +5,7 @@ Nebula Project Plugin
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/nebula-project-plugin)](https://maven-badges.herokuapp.com/maven-central/com.netflix.nebula/nebula-project-plugin)
 ![Build](https://github.com/nebula-plugins/nebula-project-plugin/actions/workflows/nebula.yml/badge.svg)
 [![Apache 2.0](https://img.shields.io/github/license/nebula-plugins/nebula-project-plugin.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
 Provides healthy defaults for a Gradle project. Currently adds:
 
 * Builds Javadoc and Sources jars
