@@ -117,7 +117,6 @@ class NebulaFacetPlugin implements Plugin<Project> {
      */
     TaskProvider<Test> createTestTask(String testName, SourceSet sourceSet) {
         TaskProvider<Test> testTask = project.tasks.register(testName, Test)
-        boolean isParallel = project.gradle.startParameter.isParallelProjectExecutionEnabled()
         testTask.configure(new Action<Test>() {
             @Override
             void execute(Test test) {
@@ -127,9 +126,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
                 test.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
                 test.testClassesDirs = sourceSet.output.classesDirs
                 test.classpath = sourceSet.runtimeClasspath
-                if (!isParallel) {
-                    test.shouldRunAfter(project.tasks.named('test'))
-                }
+                test.shouldRunAfter(project.tasks.named('test'))
             }
         })
 
