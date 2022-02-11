@@ -13,6 +13,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.internal.CollectionCallbackActionDecorator
+import org.gradle.api.internal.StartParameterInternal
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPlugin
@@ -117,7 +118,8 @@ class NebulaFacetPlugin implements Plugin<Project> {
      */
     TaskProvider<Test> createTestTask(String testName, SourceSet sourceSet) {
         TaskProvider<Test> testTask = project.tasks.register(testName, Test)
-        boolean isParallel = project.gradle.startParameter.isParallelProjectExecutionEnabled()
+        StartParameterInternal startParameter = project.gradle.startParameter as StartParameterInternal
+        boolean isParallel = startParameter.getConfigurationCache().get() && startParameter.isParallelProjectExecutionEnabled() && startParameter.maxWorkerCount > 1
         testTask.configure(new Action<Test>() {
             @Override
             void execute(Test test) {
