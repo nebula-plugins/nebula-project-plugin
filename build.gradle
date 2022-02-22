@@ -31,7 +31,7 @@ contacts {
 
 dependencies {
     implementation 'com.netflix.nebula:nebula-gradle-interop:2.0.0'
-    implementation 'com.netflix.nebula:nebula-publishing-plugin:18.2.0'
+    implementation 'com.netflix.nebula:nebula-publishing-plugin:18.3.0'
     implementation 'com.netflix.nebula:gradle-contacts-plugin:6.0.0'
     implementation 'com.netflix.nebula:gradle-dependency-lock-plugin:12.4.1'
     implementation 'com.netflix.nebula:gradle-info-plugin:11.3.0'
