@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.netflix.nebula:nebula-publishing-plugin:18.3.0'
     implementation 'com.netflix.nebula:gradle-contacts-plugin:6.0.0'
     implementation 'com.netflix.nebula:gradle-dependency-lock-plugin:12.4.1'
-    implementation 'com.netflix.nebula:gradle-info-plugin:11.3.1'
+    implementation 'com.netflix.nebula:gradle-info-plugin:11.3.2'
 }
 
 // We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file
