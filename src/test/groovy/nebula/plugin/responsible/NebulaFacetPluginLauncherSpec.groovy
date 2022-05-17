@@ -712,7 +712,7 @@ ${applyPlugin(NebulaFacetPlugin)}
         given:
         buildFile << """
             buildscript {
-                def kotlinVersion = '1.4.21'
+                def kotlinVersion = '1.6.21'
                 repositories {
                     maven {
                       url "https://plugins.gradle.org/m2/"
