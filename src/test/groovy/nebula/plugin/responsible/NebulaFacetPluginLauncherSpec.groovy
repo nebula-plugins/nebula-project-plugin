@@ -256,6 +256,11 @@ ${applyPlugin(NebulaFacetPlugin)}
                     parentSourceSet = 'test'
                 }
             }
+            tasks.withType(Test) {
+                if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+                    jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
+                }
+            }
         """
 
         when:
@@ -483,6 +488,11 @@ ${applyPlugin(NebulaFacetPlugin)}
                 }
                 specializedSmokeTest {
                     parentSourceSet = 'smokeTest'
+                }
+            }
+            tasks.withType(Test) {
+                if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+                    jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
                 }
             }
         """
