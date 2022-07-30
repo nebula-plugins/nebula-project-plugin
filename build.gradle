@@ -16,7 +16,7 @@
 
 
 plugins {
-    id 'nebula.plugin-plugin' version '16.3.0'
+    id 'nebula.plugin-plugin' version '17.0.0'
     id 'java-library'
 }
 
@@ -41,24 +41,34 @@ dependencies {
 ext.set("dependencyLock.ignore", "true")
 
 pluginBundle {
+    tags = ['nebula', 'project']
+}
+
+gradlePlugin {
     plugins {
         nebulaProject {
             id = 'nebula.project'
             displayName = 'Nebula Project'
             description = project.description
-            tags = ['nebula', 'project']
-        }
-        nebulaFacet {
-            id = 'nebula.facet'
-            displayName = 'Nebula Facet'
-            description = 'Reduce boilerplate for adding additional source sets'
-            tags = ['nebula', 'project']
+            implementationClass = 'nebula.plugin.responsible.NebulaResponsiblePlugin'
         }
         nebulaIntegTest {
             id = 'nebula.integtest'
             displayName = 'Nebula Integration Test'
             description = 'Adds source set and task for running integration tests separately from unit tests'
-            tags = ['nebula', 'project']
+            implementationClass = 'nebula.plugin.responsible.NebulaIntegTestPlugin'
+        }
+        nebulaFacet {
+            id = 'nebula.facet'
+            displayName = 'Nebula Facet'
+            description = 'Reduce boilerplate for adding additional source sets'
+            implementationClass = 'nebula.plugin.responsible.NebulaFacetPlugin'
+        }
+        nebulaIntegTestStandalone {
+            id = 'nebula.integtest-standalone'
+            displayName = 'Nebula Integration Test Standalone'
+            description = 'Adds source set and task for running integration tests separately from unit tests (standalone)'
+            implementationClass = 'nebula.plugin.responsible.NebulaIntegTestStandalonePlugin'
         }
     }
 }
