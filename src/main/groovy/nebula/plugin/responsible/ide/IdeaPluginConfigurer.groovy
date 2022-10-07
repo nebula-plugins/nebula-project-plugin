@@ -8,6 +8,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.gradle.plugins.ide.idea.model.IdeaModule
+import org.gradle.util.GradleVersion
 
 class IdeaPluginConfigurer implements IdePluginConfigurer {
     private final Project project
@@ -46,7 +47,7 @@ class IdeaPluginConfigurer implements IdePluginConfigurer {
     private void configurePluginForTestSourceSet(SourceSet testSourceSet) {
         withIdeaModule { IdeaModule module ->
             testSourceSet.allSource.srcDirs.each { srcDir ->
-                module.testSourceDirs += srcDir
+                module.testSources.from(srcDir)
             }
 
             module.scopes.TEST.plus += [getConfiguration(testSourceSet.compileClasspathConfigurationName), getConfiguration(testSourceSet.runtimeClasspathConfigurationName)]
