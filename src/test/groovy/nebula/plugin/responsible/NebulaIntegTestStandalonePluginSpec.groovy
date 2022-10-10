@@ -9,7 +9,7 @@ class NebulaIntegTestStandalonePluginSpec extends PluginProjectSpec {
 
     @Override
     String getPluginName() {
-        return 'nebula.integtest-standalone'
+        return 'com.netflix.nebula.integtest-standalone'
     }
 
     def 'after applying java plugin'() {

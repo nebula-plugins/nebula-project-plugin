@@ -9,7 +9,7 @@ class NebulaResponsiblePluginLauncherSpec extends IntegrationTestKitSpec {
         buildFile << """
             plugins {
                 id 'java'
-                id 'nebula.project'
+                id 'com.netflix.nebula.project'
             }
         """
     }

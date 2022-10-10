@@ -6,7 +6,7 @@ import org.gradle.util.GradleVersion
 
 class NebulaFacetPluginSpec extends PluginProjectSpec {
 
-    String getPluginName() { return 'nebula.facet' }
+    String getPluginName() { return 'com.netflix.nebula.facet' }
 
     def 'do nothing without Java plugin'() {
         when:

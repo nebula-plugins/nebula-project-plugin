@@ -47,25 +47,25 @@ pluginBundle {
 gradlePlugin {
     plugins {
         nebulaProject {
-            id = 'nebula.project'
+            id = 'com.netflix.nebula.project'
             displayName = 'Nebula Project'
             description = project.description
             implementationClass = 'nebula.plugin.responsible.NebulaResponsiblePlugin'
         }
         nebulaIntegTest {
-            id = 'nebula.integtest'
+            id = 'com.netflix.nebula.integtest'
             displayName = 'Nebula Integration Test'
             description = 'Adds source set and task for running integration tests separately from unit tests'
             implementationClass = 'nebula.plugin.responsible.NebulaIntegTestPlugin'
         }
         nebulaFacet {
-            id = 'nebula.facet'
+            id = 'com.netflix.nebula.facet'
             displayName = 'Nebula Facet'
             description = 'Reduce boilerplate for adding additional source sets'
             implementationClass = 'nebula.plugin.responsible.NebulaFacetPlugin'
         }
         nebulaIntegTestStandalone {
-            id = 'nebula.integtest-standalone'
+            id = 'com.netflix.nebula.integtest-standalone'
             displayName = 'Nebula Integration Test Standalone'
             description = 'Adds source set and task for running integration tests separately from unit tests (standalone)'
             implementationClass = 'nebula.plugin.responsible.NebulaIntegTestStandalonePlugin'
