@@ -16,7 +16,7 @@
 
 
 plugins {
-    id 'com.netflix.nebula.plugin-plugin' version '19.0.2'
+    id 'com.netflix.nebula.plugin-plugin' version '20.0.0'
     id 'java-library'
 }
 
@@ -40,10 +40,6 @@ dependencies {
 // We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file
 ext.set("dependencyLock.ignore", "true")
 
-pluginBundle {
-    tags = ['nebula', 'project']
-}
-
 gradlePlugin {
     plugins {
         nebulaProject {
@@ -51,24 +47,28 @@ gradlePlugin {
             displayName = 'Nebula Project'
             description = project.description
             implementationClass = 'nebula.plugin.responsible.NebulaResponsiblePlugin'
+            tags.set(['nebula', 'project'])
         }
         nebulaIntegTest {
             id = 'com.netflix.nebula.integtest'
             displayName = 'Nebula Integration Test'
             description = 'Adds source set and task for running integration tests separately from unit tests'
             implementationClass = 'nebula.plugin.responsible.NebulaIntegTestPlugin'
+            tags.set(['nebula', 'project'])
         }
         nebulaFacet {
             id = 'com.netflix.nebula.facet'
             displayName = 'Nebula Facet'
             description = 'Reduce boilerplate for adding additional source sets'
             implementationClass = 'nebula.plugin.responsible.NebulaFacetPlugin'
+            tags.set(['nebula', 'project'])
         }
         nebulaIntegTestStandalone {
             id = 'com.netflix.nebula.integtest-standalone'
             displayName = 'Nebula Integration Test Standalone'
             description = 'Adds source set and task for running integration tests separately from unit tests (standalone)'
             implementationClass = 'nebula.plugin.responsible.NebulaIntegTestStandalonePlugin'
+            tags.set(['nebula', 'project'])
         }
     }
 }
