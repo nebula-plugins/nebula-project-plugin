@@ -122,8 +122,8 @@ class NebulaFacetPlugin implements Plugin<Project> {
             void execute(Test test) {
                 test.setGroup(JavaBasePlugin.VERIFICATION_GROUP)
                 test.setDescription("Runs the ${sourceSet.name} tests")
-                test.reports.html.setDestination(new File("${project.buildDir}/reports/${sourceSet.name}"))
-                test.reports.junitXml.setDestination(new File("${project.buildDir}/${sourceSet.name}-results"))
+                test.reports.html.outputLocation.set(new File("${project.buildDir}/reports/${sourceSet.name}"))
+                test.reports.junitXml.outputLocation.set(new File("${project.buildDir}/${sourceSet.name}-results"))
                 test.testClassesDirs = sourceSet.output.classesDirs
                 test.classpath = sourceSet.runtimeClasspath
                 test.shouldRunAfter(project.tasks.named('test'))

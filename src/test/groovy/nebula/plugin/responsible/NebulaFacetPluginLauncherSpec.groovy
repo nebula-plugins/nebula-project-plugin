@@ -233,7 +233,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.7")
     }
 }
 
@@ -299,8 +299,8 @@ ${applyPlugin(NebulaFacetPlugin)}
         def result = runTasksSuccessfully( 'dependencies', '--configuration', 'smokeTestAnnotationProcessor' )
 
         then:
-        result.standardOutput.contains("""smokeTestAnnotationProcessor - Annotation processors and their dependencies for source set 'smoke test'.
-\\--- junit:junit:4.12""")
+        result.standardOutput.contains("""smokeTestAnnotationProcessor - Annotation processors and their dependencies for source set 'smoke test'.""")
+        result.standardOutput.contains("""--- junit:junit:4.12""")
     }
 
     def 'makes sure we can extend compileOnly configurations'() {
@@ -464,7 +464,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.7")
     }
 }
 
