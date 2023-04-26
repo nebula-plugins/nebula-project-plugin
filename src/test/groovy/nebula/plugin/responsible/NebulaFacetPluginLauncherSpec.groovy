@@ -233,7 +233,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.7")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.11")
     }
 }
 
@@ -464,7 +464,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.7")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.11")
     }
 }
 
