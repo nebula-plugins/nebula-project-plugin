@@ -6,7 +6,6 @@ import org.gradle.api.internal.CollectionCallbackActionDecorator
 import org.gradle.api.internal.FactoryNamedDomainObjectContainer
 import org.gradle.api.internal.MutationGuard
 import org.gradle.internal.reflect.Instantiator
-import org.gradle.util.ConfigureUtil
 
 class NamedContainerProperOrder<T> extends FactoryNamedDomainObjectContainer<T> {
 
@@ -36,7 +35,7 @@ class NamedContainerProperOrder<T> extends FactoryNamedDomainObjectContainer<T> 
         assertCanAdd(name);
         T object = doCreate(name);
         // Configure the object BEFORE, adding and kicking off addEvents in doAdd
-        ConfigureUtil.configure(configureClosure, object);
+        ConfigureUtil.configure(configureClosure, object)
         add(object);
         return object;
     }
