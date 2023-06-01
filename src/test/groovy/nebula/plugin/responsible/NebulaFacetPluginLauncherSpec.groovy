@@ -262,7 +262,9 @@ ${applyPlugin(NebulaFacetPlugin)}
                 }
             }
         """
-
+        //Spring Boot 2.x gradle plugin uses deprecated features
+        System.setProperty('ignoreDeprecations', 'true')
+        
         when:
         def result = runTasksSuccessfully( 'smokeTest' )
 
@@ -464,7 +466,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.11")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.12")
     }
 }
 
@@ -496,6 +498,8 @@ ${applyPlugin(NebulaFacetPlugin)}
                 }
             }
         """
+        //Spring Boot 2.x gradle plugin uses deprecated features
+        System.setProperty('ignoreDeprecations', 'true')
 
         when:
         def result = runTasksSuccessfully( 'specializedSmokeTest' )
