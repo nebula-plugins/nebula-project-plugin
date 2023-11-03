@@ -29,6 +29,9 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
                 testImplementation 'junit:junit:latest.release'
             }
         """
+        // Enable configuration cache :)
+        new File(projectDir, 'gradle.properties') << '''org.gradle.configuration-cache=true'''.stripIndent()
+
     }
 
     def "compiles integration test classes"() {
@@ -67,6 +70,8 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
+        //  IDEA plugin does not support configuration cache
+        new File(projectDir, 'gradle.properties').text = '''org.gradle.configuration-cache=false'''.stripIndent()
 
         buildFile << """
             apply plugin: 'idea'

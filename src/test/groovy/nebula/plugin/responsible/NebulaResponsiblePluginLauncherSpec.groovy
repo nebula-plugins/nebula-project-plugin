@@ -6,6 +6,8 @@ import org.gradle.testkit.runner.TaskOutcome
 class NebulaResponsiblePluginLauncherSpec extends IntegrationTestKitSpec {
 
     def setup() {
+        // TODO: Enable config cache when dependency lock plugin is ready
+       // new File(projectDir, 'gradle.properties') << '''org.gradle.configuration-cache=true'''.stripIndent()
         buildFile << """
             plugins {
                 id 'java'

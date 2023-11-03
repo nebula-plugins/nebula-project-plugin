@@ -3,6 +3,11 @@ package nebula.plugin.responsible
 import nebula.test.IntegrationSpec
 
 class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
+    def setup() {
+        // Enable configuration cache :)
+        new File(projectDir, 'gradle.properties') << '''org.gradle.configuration-cache=true'''.stripIndent()
+    }
+
     def 'tasks get run'() {
         createFile('src/examples/java/Hello.java') << 'public class Hello {}'
 
@@ -25,6 +30,8 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
+        //  IDEA plugin does not support configuration cache
+        new File(projectDir, 'gradle.properties').text = '''org.gradle.configuration-cache=false'''.stripIndent()
 
         buildFile << """
             apply plugin: 'java'
@@ -65,6 +72,8 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
+        //  IDEA plugin does not support configuration cache
+        new File(projectDir, 'gradle.properties').text = '''org.gradle.configuration-cache=false'''.stripIndent()
 
         buildFile << """
             apply plugin: 'java'
@@ -105,6 +114,8 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
+        //  IDEA plugin does not support configuration cache
+        new File(projectDir, 'gradle.properties').text = '''org.gradle.configuration-cache=false'''.stripIndent()
 
         buildFile << """
             ${applyPlugin(NebulaFacetPlugin)}
@@ -576,7 +587,7 @@ ${applyPlugin(NebulaFacetPlugin)}
             
             project.tasks.withType(Test) {
                 afterTest { descriptor ->
-                    logger.lifecycle("Running test: " + descriptor)
+                    println("Running test: " + descriptor)
                 }
             }
             
@@ -660,7 +671,7 @@ ${applyPlugin(NebulaFacetPlugin)}
             
             project.tasks.withType(Test) {
                 afterTest { descriptor ->
-                    logger.lifecycle("Running test: " + descriptor)
+                    println("Running test: " + descriptor)
                 }
             }
             
@@ -756,7 +767,7 @@ ${applyPlugin(NebulaFacetPlugin)}
             
             project.tasks.withType(Test) {
                 afterTest { descriptor ->
-                    logger.lifecycle("Running test: " + descriptor)
+                    println("Running test: " + descriptor)
                 }
             }
             
