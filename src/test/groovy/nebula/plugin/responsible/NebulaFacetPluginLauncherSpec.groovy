@@ -1,8 +1,8 @@
 package nebula.plugin.responsible
 
-import nebula.test.IntegrationSpec
+import nebula.test.IntegrationTestKitSpec
 
-class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
+class NebulaFacetPluginLauncherSpec extends IntegrationTestKitSpec {
     def setup() {
         // Enable configuration cache :)
         new File(projectDir, 'gradle.properties') << '''org.gradle.configuration-cache=true'''.stripIndent()
@@ -12,18 +12,20 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         createFile('src/examples/java/Hello.java') << 'public class Hello {}'
 
         buildFile << """
-            apply plugin: 'java'
-            ${applyPlugin(NebulaFacetPlugin)}
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+            }
             facets {
                 example
             }
         """
 
         when:
-        def result = runTasksSuccessfully( 'build' )
+        def result = runTasks( 'build' )
 
         then:
-        result.wasExecuted(':exampleClasses')
+        result.task(':exampleClasses').outcome
     }
 
     def "configures Idea project files for a custom test facet"() {
@@ -34,9 +36,11 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         new File(projectDir, 'gradle.properties').text = '''org.gradle.configuration-cache=false'''.stripIndent()
 
         buildFile << """
-            apply plugin: 'java'
-            ${applyPlugin(NebulaFacetPlugin)}
-            apply plugin: 'idea'
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+                id 'idea'
+            }
 
             facets {
                 functionalTest
@@ -54,7 +58,7 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
 
         writeHelloWorld('nebula.plugin.plugin')
         writeTest('src/functionalTest/java/', 'nebula.plugin.plugin', false)
-        runTasksSuccessfully('idea')
+        runTasks('idea')
 
         then:
         File ideaModuleFile = new File(projectDir, "${moduleName}.iml")
@@ -76,9 +80,11 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         new File(projectDir, 'gradle.properties').text = '''org.gradle.configuration-cache=false'''.stripIndent()
 
         buildFile << """
-            apply plugin: 'java'
-            ${applyPlugin(NebulaFacetPlugin)}
-            apply plugin: 'idea'
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+                id 'idea'
+            }
 
             facets {
                 myCustom
@@ -96,7 +102,7 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
 
         writeHelloWorld('nebula.plugin.plugin')
         writeTest('src/myCustom/java/', 'nebula.plugin.plugin', false)
-        runTasksSuccessfully('idea')
+        runTasks('idea')
 
         then:
         File ideaModuleFile = new File(projectDir, "${moduleName}.iml")
@@ -118,8 +124,10 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
         new File(projectDir, 'gradle.properties').text = '''org.gradle.configuration-cache=false'''.stripIndent()
 
         buildFile << """
-            ${applyPlugin(NebulaFacetPlugin)}
-            apply plugin: 'idea'
+           plugins {
+                id 'com.netflix.nebula.facet'
+                id 'idea'
+            }
 
             facets {
                 myCustom
@@ -137,7 +145,7 @@ class NebulaFacetPluginLauncherSpec extends IntegrationSpec {
             }
         """
 
-        runTasksSuccessfully('idea')
+        runTasks('idea')
 
         then:
         noExceptionThrown()
@@ -239,19 +247,12 @@ public class HelloTest {
 
 
         buildFile << """
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.11")
-    }
-}
-
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-${applyPlugin(NebulaFacetPlugin)}
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+                id 'org.springframework.boot' version '2.7.11'
+                 id "io.spring.dependency-management" version "1.1.3"
+            }
 
             repositories {
                 mavenCentral() 
@@ -277,22 +278,24 @@ ${applyPlugin(NebulaFacetPlugin)}
         System.setProperty('ignoreDeprecations', 'true')
         
         when:
-        def result = runTasksSuccessfully( 'smokeTest' )
+        def result = runTasks( 'smokeTest' )
 
         then:
-        result.wasExecuted(':smokeTest')
+        result.task(':smokeTest').outcome
     }
 
     def 'makes sure we can extend annotationProcessor configurations'() {
         buildFile << """
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
+            buildscript {
+                repositories {
+                    mavenCentral()
+                }
+            }
 
-apply plugin: 'java'
-${applyPlugin(NebulaFacetPlugin)}
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+            }
 
             repositories {
                 mavenCentral() 
@@ -309,24 +312,25 @@ ${applyPlugin(NebulaFacetPlugin)}
         """
 
         when:
-        def result = runTasksSuccessfully( 'dependencies', '--configuration', 'smokeTestAnnotationProcessor' )
+        def result = runTasks( 'dependencies', '--configuration', 'smokeTestAnnotationProcessor' )
 
         then:
-        result.standardOutput.contains("""smokeTestAnnotationProcessor - Annotation processors and their dependencies for source set 'smoke test'.""")
-        result.standardOutput.contains("""--- junit:junit:4.12""")
+        result.output.contains("""smokeTestAnnotationProcessor - Annotation processors and their dependencies for source set 'smoke test'.""")
+        result.output.contains("""--- junit:junit:4.12""")
     }
 
     def 'makes sure we can extend compileOnly configurations'() {
         buildFile << """
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
+            buildscript {
+                repositories {
+                    mavenCentral()
+                }
+            }
 
-apply plugin: 'java'
-${applyPlugin(NebulaFacetPlugin)}
-
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+            }
             repositories {
                 mavenCentral() 
             }
@@ -340,10 +344,10 @@ ${applyPlugin(NebulaFacetPlugin)}
         """
 
         when:
-        def result = runTasksSuccessfully( 'dependencies', '--configuration', 'smokeTestCompileClasspath' )
+        def result = runTasks( 'dependencies', '--configuration', 'smokeTestCompileClasspath' )
 
         then:
-        result.standardOutput.contains("\\--- junit:junit:4.12")
+        result.output.contains("\\--- junit:junit:4.12")
     }
 
     def 'test based facet'() {
@@ -352,9 +356,11 @@ ${applyPlugin(NebulaFacetPlugin)}
         mavenRepoFixture.generateMavenRepoDependencies(['foo:bar:2.4', 'custom:baz:5.1.27'])
 
         buildFile << """
-            apply plugin: 'java'
-            ${applyPlugin(NebulaFacetPlugin)}
-            apply plugin: 'idea'
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+                id 'idea'
+            }
 
             facets {
                 functionalTest
@@ -369,11 +375,11 @@ ${applyPlugin(NebulaFacetPlugin)}
                 functionalTestRuntimeOnly 'custom:baz:5.1.27'
             }
         """
-        def result = runTasksSuccessfully('check', '--dry-run')
+        def result = runTasks('check', '--dry-run')
 
         then:
-        result.standardOutput.contains(":functionalTest SKIPPED")
-        result.standardOutput.contains(":functionalTestClasses SKIPPED")
+        result.output.contains(":functionalTest SKIPPED")
+        result.output.contains(":functionalTestClasses SKIPPED")
     }
 
     def 'makes sure we can have a parent source set with was created by facet plugin'() {
@@ -472,19 +478,12 @@ public class HelloTest {
 
 
         buildFile << """
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.12")
-    }
-}
-
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-${applyPlugin(NebulaFacetPlugin)}
+        plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+                id 'org.springframework.boot' version '2.7.12'
+                 id "io.spring.dependency-management" version "1.1.3"
+            }
 
             repositories {
                 mavenCentral() 
@@ -513,17 +512,19 @@ ${applyPlugin(NebulaFacetPlugin)}
         System.setProperty('ignoreDeprecations', 'true')
 
         when:
-        def result = runTasksSuccessfully( 'specializedSmokeTest' )
+        def result = runTasks( 'specializedSmokeTest' )
 
         then:
-        result.wasExecuted(':specializedSmokeTest')
+        result.task(':specializedSmokeTest').outcome
     }
 
     def 'facet plugin properly consumes parents source sets outputs when groovy plugin is used'() {
         given:
         buildFile << """
-            apply plugin: 'groovy'
-            ${applyPlugin(NebulaFacetPlugin)}
+            plugins {
+                id 'groovy'
+                id 'com.netflix.nebula.facet'
+            }
 
             repositories {
                 mavenCentral()
@@ -559,17 +560,19 @@ ${applyPlugin(NebulaFacetPlugin)}
         """, "src/functionalTest/groovy")
 
         when:
-        def result = runTasksSuccessfully("functionalTest")
+        def result = runTasks("functionalTest")
 
         then:
-        result.wasExecuted("functionalTest")
+        result.task(":functionalTest").outcome
     }
 
     def 'current facets resources are read first before parent source sets'() {
         given:
         buildFile << """
-            apply plugin: 'groovy'
-            ${applyPlugin(NebulaFacetPlugin)}
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+            }
 
             repositories {
                 mavenCentral()
@@ -640,20 +643,22 @@ ${applyPlugin(NebulaFacetPlugin)}
         addResource("src/functionalTest/resources", "foo.properties", "myprop=4")
 
         when:
-        def result = runTasksSuccessfully("check")
+        def result = runTasks("check")
 
         then:
-        result.standardOutput.contains("Running test: Test test(MyClassTest)")
-        result.standardOutput.contains("Running test: Test test(MyClassFunctionalTest)")
-        result.wasExecuted("test")
-        result.wasExecuted("functionalTest")
+        result.output.contains("Running test: Test test(MyClassTest)")
+        result.output.contains("Running test: Test test(MyClassFunctionalTest)")
+        result.task(":test").outcome
+        result.task(":functionalTest").outcome
     }
 
     def 'works with java-library-plugin'() {
         given:
         buildFile << """
-            apply plugin: 'java-library'
-            ${applyPlugin(NebulaFacetPlugin)}
+            plugins {
+                id 'java'
+                id 'com.netflix.nebula.facet'
+            }
 
             repositories {
                 mavenCentral()
@@ -724,33 +729,23 @@ ${applyPlugin(NebulaFacetPlugin)}
         addResource("src/functionalTest/resources", "foo.properties", "myprop=4")
 
         when:
-        def result = runTasksSuccessfully("check")
+        def result = runTasks("check")
 
         then:
-        result.standardOutput.contains("Running test: Test test(MyClassTest)")
-        result.standardOutput.contains("Running test: Test test(MyClassFunctionalTest)")
-        result.wasExecuted("test")
-        result.wasExecuted("functionalTest")
+        result.output.contains("Running test: Test test(MyClassTest)")
+        result.output.contains("Running test: Test test(MyClassFunctionalTest)")
+        result.task(":test").outcome
+        result.task(":functionalTest").outcome
     }
 
     def 'works with kotlin'() {
         given:
         buildFile << """
-            buildscript {
-                def kotlinVersion = '1.8.20'
-                repositories {
-                    maven {
-                      url "https://plugins.gradle.org/m2/"
-                    }
-                  }
-                dependencies {
-                    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlinVersion"
-                }
+            plugins {
+                id 'java'
+                id 'org.jetbrains.kotlin.jvm' version '1.9.20'
+                id 'com.netflix.nebula.facet'
             }
-            apply plugin: 'java-library'
-            apply plugin: "org.jetbrains.kotlin.jvm"
-            ${applyPlugin(NebulaFacetPlugin)}
-
             repositories {
                 mavenCentral()
             }
@@ -820,12 +815,12 @@ ${applyPlugin(NebulaFacetPlugin)}
         addResource("src/functionalTest/resources", "foo.properties", "myprop=4")
 
         when:
-        def result = runTasksSuccessfully("check")
+        def result = runTasks("check")
 
         then:
-        result.standardOutput.contains("Running test: Test test(MyClassTest)")
-        result.standardOutput.contains("Running test: Test test(MyClassFunctionalTest)")
-        result.wasExecuted("test")
-        result.wasExecuted("functionalTest")
+        result.output.contains("Running test: Test test(MyClassTest)")
+        result.output.contains("Running test: Test test(MyClassFunctionalTest)")
+        result.task(":test").outcome
+        result.task(":functionalTest").outcome
     }
 }

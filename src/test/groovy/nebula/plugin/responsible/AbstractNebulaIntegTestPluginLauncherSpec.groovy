@@ -1,25 +1,25 @@
 package nebula.plugin.responsible
 
-import nebula.test.IntegrationSpec
-import nebula.test.functional.ExecutionResult
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import nebula.test.IntegrationTestKitSpec
 
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class
  */
-abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec {
+abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationTestKitSpec {
 
     String fakePackage = "nebula"
 
-    abstract Class<Plugin<Project>> getPluginClass()
+    abstract String getPluginId()
 
     def setup() {
         writeTest('src/integTest/java/', fakePackage, false)
         writeResource('src/integTest/resources', 'integTest')
         buildFile << """
+            plugins {
+                id 'java'
+                id '${getPluginId()}'
+            }
             apply plugin: 'java'
-            ${applyPlugin(getPluginClass())}
 
             repositories {
                 mavenCentral()
@@ -36,7 +36,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
 
     def "compiles integration test classes"() {
         when:
-        runTasksSuccessfully('integrationTest')
+        runTasks('integrationTest')
 
         then:
         fileExists("build/classes/java/integTest/$fakePackage/HelloWorldTest.class")
@@ -44,7 +44,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
 
     def "copies integTest resources"() {
         when:
-        runTasksSuccessfully('integrationTest')
+        runTasks('integrationTest')
 
         then:
         fileExists('build/resources/integTest/integTest.properties')
@@ -52,7 +52,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
 
     def "runs the integration tests"() {
         when:
-        runTasksSuccessfully('integrationTest')
+        runTasks('integrationTest')
 
         then:
         fileExists("build/integTest-results/TEST-${fakePackage}.HelloWorldTest.xml")
@@ -60,7 +60,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
 
     def "builds the integration test report"() {
         when:
-        runTasksSuccessfully('integrationTest')
+        runTasks('integrationTest')
 
         then:
         fileExists('build/reports/integTest/index.html')
@@ -88,7 +88,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
 
         writeHelloWorld('nebula.plugin.plugin')
         writeTest("src/$NebulaIntegTestPlugin.FACET_NAME/java/", 'nebula.plugin.plugin', false)
-        runTasksSuccessfully('idea')
+        runTasks('idea')
 
         then:
         File ideaModuleFile = new File(projectDir, "${moduleName}.iml")
@@ -104,5 +104,9 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationSpec
         }
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('bar-2.4.jar') }
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
+    }
+
+    boolean fileExists(String path) {
+        new File(projectDir, path).exists()
     }
 }
