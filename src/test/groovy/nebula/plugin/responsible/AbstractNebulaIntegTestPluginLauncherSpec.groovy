@@ -1,11 +1,10 @@
 package nebula.plugin.responsible
 
-import nebula.test.IntegrationTestKitSpec
 
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class
  */
-abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationTestKitSpec {
+abstract class AbstractNebulaIntegTestPluginLauncherSpec extends BaseIntegrationTestKitSpec {
 
     String fakePackage = "nebula"
 
@@ -29,9 +28,6 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends IntegrationTest
                 testImplementation 'junit:junit:latest.release'
             }
         """
-        // Enable configuration cache :)
-        new File(projectDir, 'gradle.properties') << '''org.gradle.configuration-cache=true'''.stripIndent()
-
     }
 
     def "compiles integration test classes"() {

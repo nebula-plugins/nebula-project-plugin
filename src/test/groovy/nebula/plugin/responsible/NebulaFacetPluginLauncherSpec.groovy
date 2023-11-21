@@ -1,12 +1,6 @@
 package nebula.plugin.responsible
 
-import nebula.test.IntegrationTestKitSpec
-
-class NebulaFacetPluginLauncherSpec extends IntegrationTestKitSpec {
-    def setup() {
-        // Enable configuration cache :)
-        new File(projectDir, 'gradle.properties') << '''org.gradle.configuration-cache=true'''.stripIndent()
-    }
+class NebulaFacetPluginLauncherSpec extends BaseIntegrationTestKitSpec {
 
     def 'tasks get run'() {
         createFile('src/examples/java/Hello.java') << 'public class Hello {}'

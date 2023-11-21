@@ -1,9 +1,4 @@
 package nebula.plugin.responsible
-
-import nebula.test.functional.ExecutionResult
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class
  */
