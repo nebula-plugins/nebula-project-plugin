@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.netflix.nebula.plugin-plugin' version '21.2.1'
+    id 'com.netflix.nebula.plugin-plugin' version '21.2.2'
     id 'java-library'
 }
 
