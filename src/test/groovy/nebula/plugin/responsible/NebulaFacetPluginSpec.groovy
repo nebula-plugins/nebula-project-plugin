@@ -38,7 +38,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         }
         integTest.runtimeClasspathConfigurationName == 'integTestRuntimeClasspath'
 
-        assert project.configurations.size() == 26
+        assert project.configurations.size() == 24
 
         def integTestImplementationConf = project.configurations.getByName('integTestImplementation')
         integTestImplementationConf
