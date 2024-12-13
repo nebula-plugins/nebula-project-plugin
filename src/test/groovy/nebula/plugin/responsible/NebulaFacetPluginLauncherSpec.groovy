@@ -41,7 +41,7 @@ class NebulaFacetPluginLauncherSpec extends BaseIntegrationTestKitSpec {
             }
 
             repositories {
-                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+                maven { url = '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
             }
 
             dependencies {
@@ -85,7 +85,7 @@ class NebulaFacetPluginLauncherSpec extends BaseIntegrationTestKitSpec {
             }
 
             repositories {
-                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+                maven { url = '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
             }
 
             dependencies {
@@ -130,7 +130,7 @@ class NebulaFacetPluginLauncherSpec extends BaseIntegrationTestKitSpec {
             apply plugin: 'java'
 
             repositories {
-                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+                maven { url = '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
             }
 
             dependencies {
@@ -361,7 +361,7 @@ public class HelloTest {
             }
 
             repositories {
-                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+                maven { url = '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
             }
 
             dependencies {
