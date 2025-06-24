@@ -1,5 +1,7 @@
 package nebula.plugin.responsible
 
+import groovy.xml.XmlSlurper
+
 
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class

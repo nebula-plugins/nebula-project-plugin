@@ -1,5 +1,7 @@
 package nebula.plugin.responsible
 
+import groovy.xml.XmlSlurper
+
 class NebulaFacetPluginLauncherSpec extends BaseIntegrationTestKitSpec {
 
     def 'tasks get run'() {
@@ -210,7 +212,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -244,8 +246,8 @@ public class HelloTest {
             plugins {
                 id 'java'
                 id 'com.netflix.nebula.facet'
-                id 'org.springframework.boot' version '2.7.11'
-                 id "io.spring.dependency-management" version "1.1.3"
+                id 'org.springframework.boot' version '3.+'
+                 id "io.spring.dependency-management" version "1.+"
             }
 
             repositories {
@@ -441,7 +443,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -475,8 +477,8 @@ public class HelloTest {
         plugins {
                 id 'java'
                 id 'com.netflix.nebula.facet'
-                id 'org.springframework.boot' version '2.7.12'
-                 id "io.spring.dependency-management" version "1.1.3"
+                id 'org.springframework.boot' version '3.+'
+                 id "io.spring.dependency-management" version "1.+"
             }
 
             repositories {
@@ -737,7 +739,7 @@ public class HelloTest {
         buildFile << """
             plugins {
                 id 'java'
-                id 'org.jetbrains.kotlin.jvm' version '1.9.20'
+                id 'org.jetbrains.kotlin.jvm' version '2.2.0'
                 id 'com.netflix.nebula.facet'
             }
             repositories {
