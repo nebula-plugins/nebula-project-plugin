@@ -1,5 +1,6 @@
 package nebula.plugin.responsible.gradle
 
+import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.Namer
 import org.gradle.api.internal.CollectionCallbackActionDecorator
@@ -31,13 +32,31 @@ class NamedContainerProperOrder<T> extends FactoryNamedDomainObjectContainer<T> 
     }
 
     @Override
-    public T create(String name, Closure configureClosure) {
-        assertCanAdd(name);
-        T object = doCreate(name);
+    T create(String name, Closure configureClosure) {
+        assertCanAdd(name)
+        T object = doCreate(name)
         // Configure the object BEFORE, adding and kicking off addEvents in doAdd
         ConfigureUtil.configure(configureClosure, object)
-        add(object);
-        return object;
+        add(object)
+        return object
+    }
+
+    /**
+     * Creates and configures a new object using an Action for Java/Kotlin interop.
+     * This allows plugins written in Kotlin or Java to create and configure facets
+     * programmatically without requiring Groovy closures.
+     *
+     * @param name the name of the object to create
+     * @param configureAction the action to configure the object
+     * @return the created and configured object
+     */
+    T create(String name, Action<? super T> configureAction) {
+        assertCanAdd(name)
+        T object = doCreate(name)
+        // Configure the object BEFORE adding, to maintain same semantics as closure version
+        configureAction.execute(object)
+        add(object)
+        return object
     }
 
 }
