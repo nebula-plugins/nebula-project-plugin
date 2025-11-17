@@ -187,6 +187,60 @@ class NebulaFacetPlugin implements Plugin<Project> {
         return instantiator.newInstance(NamedContainerProperOrder.class, type, instantiator, factory, decorator)
     }
 
+    /**
+     * Creates and configures a test facet programmatically using an Action.
+     * This is a type-safe alternative to using the container's create method,
+     * particularly useful for plugins written in Kotlin or Java.
+     *
+     * @param name the name of the test facet
+     * @param configureAction the action to configure the test facet
+     * @return the created and configured test facet
+     */
+    TestFacetDefinition createTestFacet(String name, Action<? super TestFacetDefinition> configureAction) {
+        TestFacetDefinition facet = new TestFacetDefinition(name)
+        configureAction.execute(facet)
+        extension.add(facet)
+        return facet
+    }
+
+    /**
+     * Creates a test facet with default configuration.
+     *
+     * @param name the name of the test facet
+     * @return the created test facet
+     */
+    TestFacetDefinition createTestFacet(String name) {
+        TestFacetDefinition facet = new TestFacetDefinition(name)
+        extension.add(facet)
+        return facet
+    }
+
+    /**
+     * Creates and configures a regular (non-test) facet programmatically using an Action.
+     *
+     * @param name the name of the facet
+     * @param configureAction the action to configure the facet
+     * @return the created and configured facet
+     */
+    FacetDefinition createFacet(String name, Action<? super FacetDefinition> configureAction) {
+        FacetDefinition facet = new FacetDefinition(name)
+        configureAction.execute(facet)
+        extension.add(facet)
+        return facet
+    }
+
+    /**
+     * Creates a regular facet with default configuration.
+     *
+     * @param name the name of the facet
+     * @return the created facet
+     */
+    FacetDefinition createFacet(String name) {
+        FacetDefinition facet = new FacetDefinition(name)
+        extension.add(facet)
+        return facet
+    }
+
     // TODO React to changes on a FacetDefinition, and re-create source set
 }
 

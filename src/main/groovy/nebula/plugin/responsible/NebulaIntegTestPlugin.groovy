@@ -1,6 +1,7 @@
 package nebula.plugin.responsible
 
 import groovy.transform.CompileStatic
+import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -22,11 +23,15 @@ class NebulaIntegTestPlugin implements Plugin<Project> {
         NebulaFacetPlugin facetPlugin = project.plugins.apply(NebulaFacetPlugin) as NebulaFacetPlugin
 
         project.plugins.withType(JavaPlugin) {
-            facetPlugin.extension.create(FACET_NAME) { TestFacetDefinition facet ->
-                facet.setTestTaskName(TASK_NAME)
-                facet.setParentSourceSet(PARENT_SOURCE_SET)
-                facet.setIncludeInCheckLifecycle(shouldIncludeInCheckLifecycle())
-            }
+            // Use the type-safe helper method - works with Java, Kotlin, and Groovy
+            facetPlugin.createTestFacet(FACET_NAME, new Action<TestFacetDefinition>() {
+                @Override
+                void execute(TestFacetDefinition facet) {
+                    facet.setTestTaskName(TASK_NAME)
+                    facet.setParentSourceSet(PARENT_SOURCE_SET)
+                    facet.setIncludeInCheckLifecycle(shouldIncludeInCheckLifecycle())
+                }
+            })
         }
     }
 
