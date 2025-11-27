@@ -136,7 +136,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
 
         then:
         createdFacet instanceof TestFacetDefinition
-        ((TestFacetDefinition) createdFacet).testTaskName == 'myTestTask'
+        ((TestFacetDefinition) createdFacet).testTaskName.get() == 'myTestTask'
         project.tasks.findByName('myTestTask') != null
     }
 
@@ -159,9 +159,9 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         facet != null
         facet instanceof TestFacetDefinition
         facet.name == 'functional'
-        facet.testTaskName == 'functionalTest'
-        facet.parentSourceSet == 'test'
-        !facet.includeInCheckLifecycle
+        facet.testTaskName.get() == 'functionalTest'
+        facet.parentSourceSet.get() == 'test'
+        !facet.includeInCheckLifecycle.get()
         project.sourceSets.findByName('functional') != null
         project.tasks.findByName('functionalTest') != null
     }
@@ -177,9 +177,9 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         then:
         facet != null
         facet.name == 'smoke'
-        facet.testTaskName == 'smoke' // Default is the facet name
-        facet.parentSourceSet == 'main' // Default from FacetDefinition
-        facet.includeInCheckLifecycle == true // Default for test facets
+        facet.testTaskName.get() == 'smoke' // Default is the facet name
+        facet.parentSourceSet.get() == 'main' // Default from FacetDefinition
+        facet.includeInCheckLifecycle.get() == true // Default for test facets
     }
 
     def 'createFacet creates regular FacetDefinition with Action'() {
@@ -200,7 +200,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         facet instanceof FacetDefinition
         !(facet instanceof TestFacetDefinition)
         facet.name == 'examples'
-        facet.parentSourceSet == 'test'
+        facet.parentSourceSet.get() == 'test'
         project.sourceSets.findByName('examples') != null
         project.tasks.findByName('examples') == null // No test task for regular facets
     }
@@ -216,7 +216,7 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         then:
         facet != null
         facet.name == 'docs'
-        facet.parentSourceSet == 'main'
+        facet.parentSourceSet.get() == 'main'
     }
 
     def 'Action configuration happens before facet is added to container'() {

@@ -60,7 +60,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
 
                 SourceSetContainer sourceSets = SourceSetUtils.getSourceSets(project)
-                sourceSets.matching { SourceSet sourceSet -> sourceSet.name == facet.parentSourceSet }.all { SourceSet parentSourceSet ->
+                sourceSets.matching { SourceSet sourceSet -> sourceSet.name == facet.parentSourceSet.get() }.all { SourceSet parentSourceSet ->
 
                     // Since we're using NamedContainerProperOrder, we're configured already.
                     SourceSet sourceSet = createSourceSet(parentSourceSet, facet)
@@ -86,8 +86,8 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     })
 
                     if (facet instanceof TestFacetDefinition) {
-                        TaskProvider<Test> testTask = createTestTask(facet.testTaskName.toString(), sourceSet)
-                        if (facet.includeInCheckLifecycle) {
+                        TaskProvider<Test> testTask = createTestTask(facet.testTaskName.get(), sourceSet)
+                        if (facet.includeInCheckLifecycle.get()) {
                             project.tasks.named('check', new Action<Task>() {
                                 @Override
                                 void execute(Task checkTask) {

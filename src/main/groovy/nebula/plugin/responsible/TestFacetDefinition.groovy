@@ -13,43 +13,20 @@ import javax.inject.Inject
  */
 @CompileStatic
 class TestFacetDefinition extends FacetDefinition {
-    private final Property<String> testTaskNameProperty
-    private final Property<Boolean> includeInCheckLifecycleProperty
-
-    @Inject
-    TestFacetDefinition(String name, ObjectFactory objects) {
-        super(name, objects)
-        this.testTaskNameProperty = objects.property(String).convention(name)
-        this.includeInCheckLifecycleProperty = objects.property(Boolean).convention(true)
-    }
-
     /**
      * Name of the test task that will get created
      */
-    Property<String> getTestTaskNameProperty() {
-        return testTaskNameProperty
-    }
-
-    String getTestTaskName() {
-        return testTaskNameProperty.get()
-    }
-
-    void setTestTaskName(String testTaskName) {
-        this.testTaskNameProperty.set(testTaskName)
-    }
+    final Property<String> testTaskName
 
     /**
      * Whether the task created for the test facet should be a dependency of 'check'.
      */
-    Property<Boolean> getIncludeInCheckLifecycleProperty() {
-        return includeInCheckLifecycleProperty
-    }
+    final Property<Boolean> includeInCheckLifecycle
 
-    boolean getIncludeInCheckLifecycle() {
-        return includeInCheckLifecycleProperty.get()
-    }
-
-    void setIncludeInCheckLifecycle(boolean includeInCheckLifecycle) {
-        this.includeInCheckLifecycleProperty.set(includeInCheckLifecycle)
+    @Inject
+    TestFacetDefinition(String name, ObjectFactory objects) {
+        super(name, objects)
+        this.testTaskName = objects.property(String).convention(name)
+        this.includeInCheckLifecycle = objects.property(Boolean).convention(true)
     }
 }

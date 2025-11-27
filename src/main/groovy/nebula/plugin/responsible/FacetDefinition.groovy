@@ -15,28 +15,16 @@ import javax.inject.Inject
 @CompileStatic
 class FacetDefinition implements Named {
     private final String name
-    private final Property<String> parentSourceSetProperty
+    final Property<String> parentSourceSet
 
     @Inject
     FacetDefinition(String name, ObjectFactory objects) {
         this.name = name
-        this.parentSourceSetProperty = objects.property(String).convention('main')
+        this.parentSourceSet = objects.property(String).convention('main')
     }
 
     @Override
     String getName() {
         return name
-    }
-
-    Property<String> getParentSourceSetProperty() {
-        return parentSourceSetProperty
-    }
-
-    String getParentSourceSet() {
-        return parentSourceSetProperty.get()
-    }
-
-    void setParentSourceSet(String parentSourceSet) {
-        this.parentSourceSetProperty.set(parentSourceSet)
     }
 }
