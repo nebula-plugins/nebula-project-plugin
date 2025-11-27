@@ -27,9 +27,9 @@ class NebulaIntegTestPlugin implements Plugin<Project> {
             facetPlugin.createTestFacet(FACET_NAME, new Action<TestFacetDefinition>() {
                 @Override
                 void execute(TestFacetDefinition facet) {
-                    facet.setTestTaskName(TASK_NAME)
-                    facet.setParentSourceSet(PARENT_SOURCE_SET)
-                    facet.setIncludeInCheckLifecycle(shouldIncludeInCheckLifecycle())
+                    facet.testTaskName.set(TASK_NAME)
+                    facet.parentSourceSet.set(PARENT_SOURCE_SET)
+                    facet.includeInCheckLifecycle.set(shouldIncludeInCheckLifecycle())
                 }
             })
         }
