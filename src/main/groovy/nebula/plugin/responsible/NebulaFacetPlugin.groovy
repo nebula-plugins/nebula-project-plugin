@@ -14,6 +14,7 @@ import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.internal.CollectionCallbackActionDecorator
 import org.gradle.api.internal.project.ProjectInternal
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
@@ -38,13 +39,14 @@ class NebulaFacetPlugin implements Plugin<Project> {
     void apply(Project project) {
         this.project = project
 
+        ObjectFactory objects = project.objects
         extension = container(FacetDefinition, new NamedDomainObjectFactory<FacetDefinition>() {
             @Override
             FacetDefinition create(String name) {
                 if (name.contains('Test')) {
-                    return new TestFacetDefinition(name)
+                    return objects.newInstance(TestFacetDefinition, name)
                 } else {
-                    return new FacetDefinition(name)
+                    return objects.newInstance(FacetDefinition, name)
                 }
             }
         })
@@ -58,7 +60,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
 
 
                 SourceSetContainer sourceSets = SourceSetUtils.getSourceSets(project)
-                sourceSets.matching { SourceSet sourceSet -> sourceSet.name == facet.parentSourceSet }.all { SourceSet parentSourceSet ->
+                sourceSets.matching { SourceSet sourceSet -> sourceSet.name == facet.parentSourceSet.get() }.all { SourceSet parentSourceSet ->
 
                     // Since we're using NamedContainerProperOrder, we're configured already.
                     SourceSet sourceSet = createSourceSet(parentSourceSet, facet)
@@ -76,7 +78,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     project.configurations.getByName(sourceSet.annotationProcessorConfigurationName).extendsFrom(annotationProcessor)
 
                     // Make sure at the classes get built as part of build
-                    project.tasks.named('build').configure(new Action<Task>() {
+                    project.tasks.named('build', new Action<Task>() {
                         @Override
                         void execute(Task buildTask) {
                             buildTask.dependsOn(sourceSet.classesTaskName)
@@ -84,9 +86,9 @@ class NebulaFacetPlugin implements Plugin<Project> {
                     })
 
                     if (facet instanceof TestFacetDefinition) {
-                        TaskProvider<Test> testTask = createTestTask(facet.testTaskName.toString(), sourceSet)
-                        if (facet.includeInCheckLifecycle) {
-                            project.tasks.named('check') configure(new Action<Task>() {
+                        TaskProvider<Test> testTask = createTestTask(facet.testTaskName.get(), sourceSet)
+                        if (facet.includeInCheckLifecycle.get()) {
+                            project.tasks.named('check', new Action<Task>() {
                                 @Override
                                 void execute(Task checkTask) {
                                     checkTask.dependsOn(testTask)
@@ -197,7 +199,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @return the created and configured test facet
      */
     TestFacetDefinition createTestFacet(String name, Action<? super TestFacetDefinition> configureAction) {
-        TestFacetDefinition facet = new TestFacetDefinition(name)
+        TestFacetDefinition facet = project.objects.newInstance(TestFacetDefinition, name)
         configureAction.execute(facet)
         extension.add(facet)
         return facet
@@ -210,7 +212,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @return the created test facet
      */
     TestFacetDefinition createTestFacet(String name) {
-        TestFacetDefinition facet = new TestFacetDefinition(name)
+        TestFacetDefinition facet = project.objects.newInstance(TestFacetDefinition, name)
         extension.add(facet)
         return facet
     }
@@ -223,7 +225,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @return the created and configured facet
      */
     FacetDefinition createFacet(String name, Action<? super FacetDefinition> configureAction) {
-        FacetDefinition facet = new FacetDefinition(name)
+        FacetDefinition facet = project.objects.newInstance(FacetDefinition, name)
         configureAction.execute(facet)
         extension.add(facet)
         return facet
@@ -236,7 +238,7 @@ class NebulaFacetPlugin implements Plugin<Project> {
      * @return the created facet
      */
     FacetDefinition createFacet(String name) {
-        FacetDefinition facet = new FacetDefinition(name)
+        FacetDefinition facet = project.objects.newInstance(FacetDefinition, name)
         extension.add(facet)
         return facet
     }
