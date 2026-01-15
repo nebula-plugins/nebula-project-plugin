@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    id 'com.netflix.nebula.plugin-plugin' version '22.0.2'
+    id 'com.netflix.nebula.plugin-plugin'
     id 'java-library'
 }
 
@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.netflix.nebula:gradle-contacts-plugin:latest.release'
     implementation 'com.netflix.nebula:gradle-dependency-lock-plugin:latest.release'
     implementation 'com.netflix.nebula:gradle-info-plugin:latest.release'
+    testImplementation("org.spockframework:spock-junit4:2.4-groovy-4.0")
 }
 
 // We use hard coded versions here due to bundling compatibility, and we don't want to accidentally generate a lock file
@@ -71,3 +72,8 @@ gradlePlugin {
     }
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
