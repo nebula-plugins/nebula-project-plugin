@@ -166,6 +166,33 @@ class NebulaFacetPluginSpec extends PluginProjectSpec {
         project.tasks.findByName('functionalTest') != null
     }
 
+    /**
+     * downstream projects are using these setters, so we should not remove them
+     */
+    def 'TestFacetDefinition setters'() {
+        when:
+        project.apply plugin: 'java'
+        project.apply plugin: NebulaFacetPlugin.class
+        NebulaFacetPlugin plugin = project.plugins.getPlugin(NebulaFacetPlugin)
+
+        TestFacetDefinition facet = plugin.createTestFacet('functional', new Action<TestFacetDefinition>() {
+            @Override
+            void execute(TestFacetDefinition f) {
+                f.setTestTaskName("functionalTest")
+                f.setParentSourceSet("test")
+                f.setIncludeInCheckLifecycle(false)
+            }
+        })
+
+        then:
+        facet != null
+        facet instanceof TestFacetDefinition
+        facet.name == 'functional'
+        facet.testTaskName.get() == 'functionalTest'
+        facet.parentSourceSet.get() == 'test'
+        !facet.includeInCheckLifecycle.get()
+    }
+
     def 'createTestFacet without Action uses defaults'() {
         when:
         project.apply plugin: 'java'

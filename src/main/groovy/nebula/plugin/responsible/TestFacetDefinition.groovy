@@ -29,4 +29,18 @@ class TestFacetDefinition extends FacetDefinition {
         this.testTaskName = objects.property(String).convention(name)
         this.includeInCheckLifecycle = objects.property(Boolean).convention(true)
     }
+
+    /**
+     * downstream projects are using this setter, so we should not remove it
+     */
+    void setTestTaskName(String name) {
+        testTaskName.set(name)
+    }
+
+    /**
+     * downstream projects are using this setter, so we should not remove it
+     */
+    void setIncludeInCheckLifecycle(boolean includeInCheckLifecycle) {
+        this.includeInCheckLifecycle.set(includeInCheckLifecycle)
+    }
 }

@@ -27,4 +27,11 @@ class FacetDefinition implements Named {
     String getName() {
         return name
     }
+
+    /**
+     * downstream projects are using this setter, so we should not remove it
+     */
+    void setParentSourceSet(String name) {
+        parentSourceSet.set(name)
+    }
 }
