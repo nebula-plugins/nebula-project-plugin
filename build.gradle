@@ -47,6 +47,11 @@ gradlePlugin {
             description = project.description
             implementationClass = 'nebula.plugin.responsible.NebulaResponsiblePlugin'
             tags.set(['nebula', 'project'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
         nebulaIntegTest {
             id = 'com.netflix.nebula.integtest'
@@ -54,6 +59,11 @@ gradlePlugin {
             description = 'Adds source set and task for running integration tests separately from unit tests'
             implementationClass = 'nebula.plugin.responsible.NebulaIntegTestPlugin'
             tags.set(['nebula', 'project'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
         nebulaFacet {
             id = 'com.netflix.nebula.facet'
@@ -61,6 +71,11 @@ gradlePlugin {
             description = 'Reduce boilerplate for adding additional source sets'
             implementationClass = 'nebula.plugin.responsible.NebulaFacetPlugin'
             tags.set(['nebula', 'project'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
         nebulaIntegTestStandalone {
             id = 'com.netflix.nebula.integtest-standalone'
@@ -68,6 +83,11 @@ gradlePlugin {
             description = 'Adds source set and task for running integration tests separately from unit tests (standalone)'
             implementationClass = 'nebula.plugin.responsible.NebulaIntegTestStandalonePlugin'
             tags.set(['nebula', 'project'])
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
     }
 }
