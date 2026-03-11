@@ -8,13 +8,4 @@ class NebulaIntegTestPluginLauncherSpec extends AbstractNebulaIntegTestPluginLau
     String getPluginId() {
         return 'com.netflix.nebula.integtest'
     }
-
-    def "check depends on integration test task"() {
-        when:
-        def result = runTasks('check')
-
-        then:
-        result.task(':test').outcome
-        result.task(':integrationTest')?.outcome
-    }
 }

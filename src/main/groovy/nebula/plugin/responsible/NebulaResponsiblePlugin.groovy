@@ -19,12 +19,9 @@ import org.gradle.api.tasks.testing.Test
 @CompileStatic
 class NebulaResponsiblePlugin implements Plugin<Project> {
     private static final String DEPENDENCY_LOCK_PLUGIN_ENABLED = 'nebula.dependencyLockPluginEnabled'
-    protected Project project
 
     @Override
     void apply(Project project) {
-        this.project = project
-
         // Publishing
         if (isBuildingSomething(project)) {
             project.plugins.apply(MavenPublishPlugin)
@@ -59,7 +56,7 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         })
     }
 
-    private boolean isBuildingSomething(Project project) {
+    private static boolean isBuildingSomething(Project project) {
         def isParentProject = project.rootProject.subprojects.any { it.parent == project }
         return !isParentProject
     }
