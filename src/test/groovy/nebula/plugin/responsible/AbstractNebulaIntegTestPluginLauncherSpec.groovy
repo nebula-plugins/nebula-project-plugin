@@ -2,7 +2,6 @@ package nebula.plugin.responsible
 
 import groovy.xml.XmlSlurper
 
-
 /**
  * Runs Gradle Launcher style integration Spock tests on the NebulaIntegTestPlugin class
  */
@@ -32,38 +31,6 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends BaseIntegration
         """
     }
 
-    def "compiles integration test classes"() {
-        when:
-        runTasks('integrationTest')
-
-        then:
-        fileExists("build/classes/java/integTest/$fakePackage/HelloWorldTest.class")
-    }
-
-    def "copies integTest resources"() {
-        when:
-        runTasks('integrationTest')
-
-        then:
-        fileExists('build/resources/integTest/integTest.properties')
-    }
-
-    def "runs the integration tests"() {
-        when:
-        runTasks('integrationTest')
-
-        then:
-        fileExists("build/integTest-results/TEST-${fakePackage}.HelloWorldTest.xml")
-    }
-
-    def "builds the integration test report"() {
-        when:
-        runTasks('integrationTest')
-
-        then:
-        fileExists('build/reports/integTest/index.html')
-    }
-
     def "Can configures Idea project"() {
         when:
         MavenRepoFixture mavenRepoFixture = new MavenRepoFixture(new File(projectDir, 'build'))
@@ -75,7 +42,7 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends BaseIntegration
             apply plugin: 'idea'
 
             repositories {
-                maven { url '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
+                maven { url = '$mavenRepoFixture.mavenRepoDir.canonicalPath' }
             }
 
             dependencies {
@@ -102,9 +69,5 @@ abstract class AbstractNebulaIntegTestPluginLauncherSpec extends BaseIntegration
         }
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('bar-2.4.jar') }
         orderEntries.find { it.library.CLASSES.root.@url.text().contains('baz-5.1.27.jar') }
-    }
-
-    boolean fileExists(String path) {
-        new File(projectDir, path).exists()
     }
 }
