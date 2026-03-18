@@ -73,6 +73,11 @@ gradlePlugin {
                 "Adds source set and task for running integration tests separately from unit tests (standalone)"
             implementationClass = "nebula.plugin.responsible.NebulaIntegTestStandalonePlugin"
             tags.addAll("nebula", "project")
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
     }
 }
