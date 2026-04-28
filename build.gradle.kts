@@ -101,6 +101,6 @@ testing {
 }
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL // ALL helps when debugging gradle plugins
-    gradleVersion = "9.2.1"
-    distributionSha256Sum = "72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f"
+    gradleVersion = "9.5.0"
+    distributionSha256Sum = "a3c4ba4aca8f0075688b9c5b18939fd28e8cb4357c227da5c1d9f38343791439"
 }

@@ -39,7 +39,9 @@ internal class NebulaIntegTestStandalonePluginTest {
         }
 
         val checkResult = runner.run("check") {
-            withGradleVersion(gradle.version)
+            if(gradle.version != null) {
+                withGradleVersion(gradle.version)
+            }
         }
         assertThat(checkResult)
             .hasNoMutableStateWarnings()
@@ -50,7 +52,9 @@ internal class NebulaIntegTestStandalonePluginTest {
             .`as`("check does not depend on integrationTest")
             .isNull()
         val integrationTestResult = runner.run("integrationTest") {
-            withGradleVersion(gradle.version)
+            if(gradle.version != null) {
+                withGradleVersion(gradle.version)
+            }
         }
         assertThat(integrationTestResult)
             .hasNoMutableStateWarnings()
