@@ -39,7 +39,9 @@ internal class NebulaIntegTestPluginTest {
         }
 
         val result = runner.run("check") {
-            withGradleVersion(gradle.version)
+            if(gradle.version != null) {
+                withGradleVersion(gradle.version)
+            }
         }
         assertThat(result)
             .hasNoMutableStateWarnings()
