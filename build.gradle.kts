@@ -33,7 +33,7 @@ dependencies {
     implementation("com.netflix.nebula:nebula-gradle-interop:latest.release")
     implementation("com.netflix.nebula:nebula-publishing-plugin:latest.release")
     implementation("com.netflix.nebula:gradle-contacts-plugin:latest.release")
-    implementation("com.netflix.nebula:gradle-dependency-lock-plugin:latest.release")
+    implementation("com.netflix.nebula:gradle-dependency-lock-plugin:16.+")
     implementation("com.netflix.nebula:gradle-info-plugin:latest.release")
     testImplementation("org.spockframework:spock-junit4:2.4-groovy-4.0")
 }

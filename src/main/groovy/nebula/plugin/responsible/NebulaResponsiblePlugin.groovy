@@ -2,7 +2,6 @@ package nebula.plugin.responsible
 
 import groovy.transform.CompileStatic
 import nebula.plugin.contacts.ContactsPlugin
-import nebula.plugin.dependencylock.DependencyLockPlugin
 import nebula.plugin.info.InfoPlugin
 import nebula.plugin.publishing.maven.MavenPublishPlugin
 import nebula.plugin.publishing.publications.JavadocJarPlugin
@@ -38,7 +37,7 @@ class NebulaResponsiblePlugin implements Plugin<Project> {
         // Dependency Locking
         def nebulaDependencyLockPluginEnabled = project.hasProperty(DEPENDENCY_LOCK_PLUGIN_ENABLED) ? Boolean.valueOf(project.property(DEPENDENCY_LOCK_PLUGIN_ENABLED) as String) : true
         if(nebulaDependencyLockPluginEnabled) {
-            project.plugins.apply(DependencyLockPlugin)
+            project.plugins.apply("com.netflix.nebula.dependency-lock")
         }
 
         // TODO Publish javadoc somehow
