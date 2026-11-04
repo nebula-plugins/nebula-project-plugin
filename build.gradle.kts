@@ -46,6 +46,11 @@ gradlePlugin {
             description = project.description
             implementationClass = "nebula.plugin.responsible.NebulaResponsiblePlugin"
             tags.addAll("nebula", "project")
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
         create("nebulaIntegTest") {
             id = "com.netflix.nebula.integtest"
@@ -65,6 +70,11 @@ gradlePlugin {
             description = "Reduce boilerplate for adding additional source sets"
             implementationClass = "nebula.plugin.responsible.NebulaFacetPlugin"
             tags.addAll("nebula", "project")
+            compatibility {
+                features {
+                    configurationCache = true
+                }
+            }
         }
         create("nebulaIntegTestStandalone") {
             id = "com.netflix.nebula.integtest-standalone"
