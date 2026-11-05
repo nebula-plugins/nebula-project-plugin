@@ -35,6 +35,11 @@ From v7.0.0, nebula-project-plugin supports only Gradle 5.0+
 
 From v10.0.1, nebula-project-plugin supports only Gradle 7.4+
 
+Strict configuration-cache and Isolated Projects regression coverage for the independently
+applied facet and integration-test subplugins is described in
+[Standalone subplugin validation](docs/standalone-subplugin-validation.md). Its verified
+scope does not establish compatibility for `com.netflix.nebula.project`.
+
 
 Nebula Facet Plugin
 =======================
