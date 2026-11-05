@@ -74,6 +74,16 @@ syntax under isolation is verified on 9.6.1. The older expected failures are
 limitation checks, not positive compatibility evidence. Bare root syntax is covered
 positively in both modes on all three versions.
 
+## Fixture toolchains
+
+The existing launcher tests publish sample dependencies through `MavenRepoFixture`.
+Those modules now target Java 17, matching the JDK installed by every CI job.
+The generator's default Java 8 toolchain was an undeclared prerequisite: on machines
+without Java 8, publication failed and later IDEA/dependency assertions saw missing
+artifacts. Fixture publication now uses TestKit's `build()` to report a failed
+publication immediately. Production sources, consumer toolchains and IDE assertions
+are unchanged.
+
 ## Reproduction and limits
 
 ```shell
@@ -98,6 +108,11 @@ passed **38 tests**, also with zero skips:
   --tests nebula.project.internal.ConfigurationUtilTest \
   -Pcom.netflix.gradle-predictive-test-selection.enabled=false
 ```
+
+After correcting the launcher fixture toolchain, a full committed-test selection
+and `build` passed on **JDK 25**: **98 tests**, zero failures and zero skips. The
+14 launcher tests also passed with fixture toolchain discovery restricted to
+Java 17, verifying that Java 8 is no longer required.
 
 This is bounded validation with Groovy build scripts, Java sources and JUnit 4.
 It does not certify all Gradle versions, Kotlin DSL or language-plugin combinations,
