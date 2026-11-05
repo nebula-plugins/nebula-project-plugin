@@ -3,10 +3,10 @@ package nebula.project
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.util.GradleVersion
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
 import java.util.stream.Stream
@@ -17,8 +17,8 @@ internal class StandalonePluginsIsolatedProjectsTest {
     @TempDir
     lateinit var projectDir: File
 
-    data class Mode(val gradle: SupportedGradleVersion, val isolated: Boolean) {
-        override fun toString() = "${gradle.version ?: "wrapper"}-${if (isolated) "isolated" else "configuration-cache"}"
+    data class Mode(val gradleVersion: String?, val isolated: Boolean) {
+        override fun toString() = "${gradleVersion ?: "wrapper"}-${if (isolated) "isolated" else "configuration-cache"}"
     }
 
     data class IntegrationCase(val mode: Mode, val standalone: Boolean) {
@@ -28,7 +28,8 @@ internal class StandalonePluginsIsolatedProjectsTest {
 
     companion object {
         @JvmStatic
-        fun modes(): Stream<Mode> = SupportedGradleVersion.entries.flatMap { version ->
+        // Keep the maintained minimum and wrapper, and cover Gradle's parent-lookup fix.
+        fun modes(): Stream<Mode> = (SupportedGradleVersion.entries.map { it.version } + "9.6.1").distinct().flatMap { version ->
             listOf(Mode(version, false), Mode(version, true))
         }.stream()
 
@@ -221,8 +222,8 @@ internal class StandalonePluginsIsolatedProjectsTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @EnumSource(SupportedGradleVersion::class)
-    fun `bare child facet syntax retains its isolation boundary`(gradle: SupportedGradleVersion) {
+    @MethodSource("modes")
+    fun `bare child facet syntax follows Gradle parent lookup behavior`(mode: Mode) {
         settings("include 'child'")
         write("build.gradle", "")
         write("child/build.gradle", """
@@ -230,19 +231,51 @@ internal class StandalonePluginsIsolatedProjectsTest {
             facets { examples }
         """)
         write("child/src/examples/java/Example.java", "public class Example {}")
-        val ordinary = Mode(gradle, false)
-        val first = run(ordinary, ":child:build")
-        stored(first)
-        executed(first, ":child:compileExamplesJava")
-        reused(run(ordinary, ":child:build"))
+        write("child/src/examples/resources/example.txt", "example-resource")
 
-        // Expected failure is a boundary characterization, never compatibility evidence.
-        val rejected = run(Mode(gradle, true), ":child:build", expectFailure = true)
-        assertTrue(rejected.output.contains("cannot dynamically look up a property in the parent project"), rejected.output)
-        assertTrue(rejected.output.contains("Build file 'child/build.gradle'"), rejected.output)
-        assertTrue(rejected.output.contains("Configuration cache entry discarded"), rejected.output)
-        assertFalse(rejected.output.contains("Configuration cache entry stored"), rejected.output)
-        assertFalse(rejected.output.contains("Configuration cache entry reused"), rejected.output)
+        val version = GradleVersion.version(mode.gradleVersion ?: GradleVersion.current().version)
+        if (mode.isolated && version < GradleVersion.version("9.6")) {
+            // Gradle 9.6 removes this implicit parent lookup, also present with a plain container.
+            // Keep older-version rejection separate from the supported ordinary DSL behavior.
+            val rejected = run(mode, ":child:build", expectFailure = true)
+            assertTrue(rejected.output.contains("cannot dynamically look up a property in the parent project"), rejected.output)
+            assertTrue(rejected.output.contains("Build file 'child/build.gradle'"), rejected.output)
+            assertTrue(rejected.output.contains("Configuration cache entry discarded"), rejected.output)
+            assertFalse(rejected.output.contains("Configuration cache entry stored"), rejected.output)
+            assertFalse(rejected.output.contains("Configuration cache entry reused"), rejected.output)
+            return
+        }
+
+        val first = run(mode, ":child:build")
+        stored(first)
+        executed(first, ":child:compileExamplesJava", ":child:processExamplesResources")
+        assertTrue(file("child/build/classes/java/examples/Example.class").isFile)
+        assertEquals("example-resource", file("child/build/resources/examples/example.txt").readText())
+        val warm = run(mode, ":child:build")
+        reused(warm)
+        upToDate(warm, ":child:compileExamplesJava", ":child:processExamplesResources")
+
+        deleteBuildOutputs("child/")
+        val regenerated = run(mode, ":child:build")
+        reused(regenerated)
+        executed(regenerated, ":child:compileExamplesJava", ":child:processExamplesResources")
+        assertTrue(file("child/build/classes/java/examples/Example.class").isFile)
+        assertEquals("example-resource", file("child/build/resources/examples/example.txt").readText())
+
+        write("child/src/examples/java/Example.java", "public class Example { int value = 42; }")
+        write("child/src/examples/resources/example.txt", "changed-example-resource")
+        val sourceChanged = run(mode, ":child:build")
+        reused(sourceChanged)
+        executed(sourceChanged, ":child:compileExamplesJava", ":child:processExamplesResources")
+        assertEquals("changed-example-resource", file("child/build/resources/examples/example.txt").readText())
+
+        file("child/build.gradle").appendText("\nfacets { samples }\n")
+        write("child/src/samples/java/Sample.java", "public class Sample {}")
+        val configured = run(mode, ":child:build")
+        stored(configured)
+        executed(configured, ":child:compileSamplesJava")
+        assertTrue(file("child/build/classes/java/samples/Sample.class").isFile)
+        reused(run(mode, ":child:build"))
     }
 
     private fun producer(value: Int) = write("libraries/producer/src/main/java/Library.java",
@@ -305,7 +338,7 @@ internal class StandalonePluginsIsolatedProjectsTest {
             .withArguments(*tasks, "--configuration-cache", "--configuration-cache-problems=fail",
                 "-Dorg.gradle.unsafe.isolated-projects=${mode.isolated}", "--no-build-cache",
                 "--stacktrace", "--console=plain", "--max-workers=2", "--no-watch-fs")
-        mode.gradle.version?.let { runner.withGradleVersion(it) }
+        mode.gradleVersion?.let { runner.withGradleVersion(it) }
         return if (expectFailure) runner.buildAndFail() else runner.build()
     }
 
